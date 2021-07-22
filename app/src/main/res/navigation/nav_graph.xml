@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/movie_lists_fragment">
+
+    <fragment
+        android:id="@+id/movie_lists_fragment"
+        android:name="com.example.tmdbapplication.presentation.movielists.MovieListsFragment"
+        android:label="@string/fragment_movie_list_label"
+        tools:layout="@layout/fragment_movie_lists">
+        <action
+            android:id="@+id/action_movie_lists_fragment_to_watchlist_fragment"
+            app:destination="@id/watchlist_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/watchlist_fragment"
+        android:name="com.example.tmdbapplication.presentation.watchlist.WatchlistFragment"
+        android:label="@string/fragment_watchlist_label"
+        tools:layout="@layout/fragment_watchlist"/>
+</navigation>

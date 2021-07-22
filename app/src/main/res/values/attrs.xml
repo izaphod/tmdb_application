@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MovieUserScoreView">
+        <attr name="musv_backColor" format="color" />
+        <attr name="musv_strokeColor" format="color" />
+        <attr name="musv_highScoreColor" format="color" />
+        <attr name="musv_normalScoreColor" format="color" />
+        <attr name="musv_lowScoreColor" format="color" />
+        <attr name="musv_textColor" format="color" />
+    </declare-styleable>
+</resources>
