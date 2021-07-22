@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import javax.inject.Inject
@@ -15,6 +16,7 @@ import com.example.tmdbapplication.TmdbApplication
 import com.example.tmdbapplication.databinding.FragmentMovieListsBinding
 import com.example.tmdbapplication.presentation.model.MovieUiModel
 import com.example.tmdbapplication.presentation.movielists.list.MovieItemAdapter
+import com.example.tmdbapplication.presentation.movielists.list.onScrollToMiddle
 
 class MovieListsFragment : MvpAppCompatFragment(R.layout.fragment_movie_lists), MovieListsView {
 

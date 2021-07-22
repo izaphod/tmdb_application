@@ -1,2 +1,2 @@
-rootProject.name = "TMDB Appllication"
+rootProject.name = "TMDB Application"
 include ':app'
