@@ -1,4 +1,4 @@
-package com.example.tmdbappllication
+package com.example.tmdbapplication
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
