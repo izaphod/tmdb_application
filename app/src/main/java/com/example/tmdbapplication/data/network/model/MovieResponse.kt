@@ -15,22 +15,18 @@ data class MovieResponse(
 
 fun List<MovieResponse>.asDomainModel(): List<Movie> {
     return map { movieResponse ->
-        MovieResponseMapper.mapToDomain(movieResponse)
+        movieResponse.asDomainModel()
     }
 }
 
-object MovieResponseMapper {
-    fun mapToDomain(movieResponse: MovieResponse): Movie {
-        return with(movieResponse) {
-            Movie(
-                movieId = id,
-                title = title,
-                overview = overview,
-                posterPath = posterPath,
-                backdropPath = backdropPath,
-                rating = rating,
-                releaseDate = releaseDate
-            )
-        }
-    }
+fun MovieResponse.asDomainModel(): Movie {
+    return Movie(
+        movieId = id,
+        title = title,
+        overview = overview,
+        posterPath = posterPath,
+        backdropPath = backdropPath,
+        rating = rating,
+        releaseDate = releaseDate
+    )
 }

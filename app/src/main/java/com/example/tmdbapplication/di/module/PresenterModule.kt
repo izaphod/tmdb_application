@@ -1,6 +1,6 @@
 package com.example.tmdbapplication.di.module
 
-import com.example.tmdbapplication.presentation.movielists.MovieListPresenter
+import com.example.tmdbapplication.presentation.movielist.MovieListPresenter
 import com.example.tmdbapplication.domain.repository.MovieDataSource
 import com.example.tmdbapplication.domain.repository.WatchlistDataSource
 import dagger.Module

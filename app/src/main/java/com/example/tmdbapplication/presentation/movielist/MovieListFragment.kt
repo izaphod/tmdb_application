@@ -1,11 +1,14 @@
-package com.example.tmdbapplication.presentation.movielists
+package com.example.tmdbapplication.presentation.movielist
 
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import javax.inject.Inject
 import javax.inject.Provider
@@ -15,10 +18,7 @@ import com.example.tmdbapplication.R
 import com.example.tmdbapplication.TmdbApplication
 import com.example.tmdbapplication.databinding.FragmentMovieListBinding
 import com.example.tmdbapplication.presentation.model.MovieViewModel
-import com.example.tmdbapplication.presentation.movielists.list.MovieItemAdapter
-import com.example.tmdbapplication.presentation.movielists.list.onScrollToEnd
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.Disposable
+import com.example.tmdbapplication.presentation.movielist.list.MoviePagingAdapter
 
 class MovieListFragment : MvpAppCompatFragment(R.layout.fragment_movie_list), MovieListView {
 
@@ -31,16 +31,11 @@ class MovieListFragment : MvpAppCompatFragment(R.layout.fragment_movie_list), Mo
     private var _binding: FragmentMovieListBinding? = null
     private val binding get() = _binding!!
 
-    private val movieItemAdapter = MovieItemAdapter(
-        itemList = mutableListOf(),
+    private val movieItemAdapter = MoviePagingAdapter(
         onMovieClick = {
 
         }
-    ) { movie, position ->
-        presenter.onItemWatchlistPressed(movie, position)
-    }
-
-    private var viewModelDisposable: Disposable? = null
+    ) { movie -> presenter.onItemWatchlistPressed(movie) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -60,34 +55,25 @@ class MovieListFragment : MvpAppCompatFragment(R.layout.fragment_movie_list), Mo
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setProgressBarVisibility(true)
         initRecyclerView()
         initListeners()
-        subscribeToViewModels()
         Log.d(TAG, "onViewCreated")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        subscribeToViewModels()
-        Log.d(TAG, "onStart")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        unsubscribeFromViewModels()
-        Log.d(TAG, "onStop")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        unsubscribeFromViewModels()
         Log.d(TAG, "onDestroyView")
     }
 
-    override fun notifyWatchlistFlagChanged(position: Int) {
-        movieItemAdapter.notifyItemChanged(position)
+    override fun onNewMovies(pagingData: PagingData<MovieViewModel>) {
+        movieItemAdapter.submitData(lifecycle, pagingData)
+        Log.d(TAG, "onNewMovies")
+    }
+
+    override fun setProgressBarVisibility(isVisible: Boolean) {
+        binding.progressBar.layoutProgressBar.isVisible = isVisible
+        Log.d(TAG, "setProgressBarVisibility: $isVisible")
     }
 
     private fun initRecyclerView() {
@@ -95,11 +81,6 @@ class MovieListFragment : MvpAppCompatFragment(R.layout.fragment_movie_list), Mo
         movieLayoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerViewPopularMovies.layoutManager = movieLayoutManager
-        binding.recyclerViewPopularMovies.onScrollToEnd(movieLayoutManager, presenter.lastLoadedPage) {
-            presenter.onMovieListScrolled(it)
-            binding.recyclerViewPopularMovies.clearOnScrollListeners()
-            Log.d(TAG, "onScrolledTo: page = $it")
-        }
     }
 
     private fun initListeners() {
@@ -116,36 +97,6 @@ class MovieListFragment : MvpAppCompatFragment(R.layout.fragment_movie_list), Mo
             }
             false
         }
-    }
-
-    private fun subscribeToViewModels() {
-        if (viewModelDisposable == null) {
-            viewModelDisposable = presenter
-                .observeViewModels()
-                .distinctUntilChanged()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { viewModel ->
-                    onNewMovies(viewModel)
-                }
-        }
-    }
-
-    private fun unsubscribeFromViewModels() {
-        viewModelDisposable?.dispose()
-    }
-
-    private fun onNewMovies(model: MovieViewModel) = with(model) {
-        setProgressBarVisibility(state is MovieViewModel.State.Loading)
-        movieItemAdapter.appendMovies(movies)
-        binding.recyclerViewPopularMovies.onScrollToEnd(movieLayoutManager, presenter.lastLoadedPage) {
-            presenter.onMovieListScrolled(it)
-            binding.recyclerViewPopularMovies.clearOnScrollListeners()
-            Log.d(TAG, "onScrolledTo: page = $it")
-        }
-    }
-
-    private fun setProgressBarVisibility(isVisible: Boolean) {
-        binding.progressBar.layoutProgressBar.isVisible = isVisible
     }
 
     companion object {

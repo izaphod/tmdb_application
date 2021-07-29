@@ -1,18 +1,16 @@
-package com.example.tmdbapplication.presentation.watchlist
+package com.example.tmdbapplication.presentation.movielist
 
+import androidx.paging.PagingData
 import com.example.tmdbapplication.presentation.model.MovieViewModel
 import moxy.MvpView
 import moxy.viewstate.strategy.AddToEndStrategy
 import moxy.viewstate.strategy.StateStrategyType
 
-interface WatchlistView : MvpView {
+interface MovieListView : MvpView {
 
     @StateStrategyType(value = AddToEndStrategy::class)
-    fun showWatchlist(movies: List<MovieViewModel>)
+    fun onNewMovies(pagingData: PagingData<MovieViewModel>)
 
     @StateStrategyType(value = AddToEndStrategy::class)
     fun setProgressBarVisibility(isVisible: Boolean)
-
-    @StateStrategyType(value = AddToEndStrategy::class)
-    fun setEmptyScreenVisibility(isVisible: Boolean)
 }

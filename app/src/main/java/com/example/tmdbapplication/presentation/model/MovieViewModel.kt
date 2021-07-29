@@ -1,14 +1,19 @@
 package com.example.tmdbapplication.presentation.model
 
-data class MovieViewModel(
-    val state: State,
-    val movies: List<WatchlistViewModel>
-) {
+import com.example.tmdbapplication.data.database.entity.WatchlistEntity
+import com.example.tmdbapplication.domain.model.Movie
 
-    sealed class State {
-        object Loading : State()
-        class Error(val msg: String) : State()
-        object Content : State()
-        object Empty : State()
-    }
+data class MovieViewModel(
+    val movie: Movie,
+    var isInWatchlist: Boolean = false
+)
+
+fun Movie.asMovieViewModel(): MovieViewModel {
+    return MovieViewModel(movie = this)
 }
+
+fun MovieViewModel.asWatchlistEntity(): WatchlistEntity {
+    return WatchlistEntity(movieId = this.movie.movieId)
+}
+
+

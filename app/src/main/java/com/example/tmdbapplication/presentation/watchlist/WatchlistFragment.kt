@@ -11,8 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdbapplication.R
 import com.example.tmdbapplication.TmdbApplication
 import com.example.tmdbapplication.databinding.FragmentWatchlistBinding
-import com.example.tmdbapplication.presentation.model.WatchlistViewModel
-import com.example.tmdbapplication.presentation.movielists.list.MovieItemAdapter
+import com.example.tmdbapplication.presentation.model.MovieViewModel
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
@@ -27,14 +26,14 @@ class WatchlistFragment : MvpAppCompatFragment(R.layout.fragment_watchlist), Wat
     private var _binding: FragmentWatchlistBinding? = null
     private val binding get() = _binding!!
 
-    private val adapter = MovieItemAdapter(
-        itemList = mutableListOf(),
-        onMovieClick = { movie ->
-
-        }
-    ) { movie, position ->
-
-    }
+//    private val adapter = MovieItemAdapter(
+//        itemList = mutableListOf(),
+//        onMovieClick = { movie ->
+//
+//        }
+//    ) { movie, position ->
+//
+//    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -53,9 +52,9 @@ class WatchlistFragment : MvpAppCompatFragment(R.layout.fragment_watchlist), Wat
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.recyclerViewWatchlist.adapter = adapter
-        binding.recyclerViewWatchlist.layoutManager =
-            GridLayoutManager(context, 3, RecyclerView.VERTICAL, false)
+//        binding.recyclerViewWatchlist.adapter = adapter
+//        binding.recyclerViewWatchlist.layoutManager =
+//            GridLayoutManager(context, 3, RecyclerView.VERTICAL, false)
     }
 
     override fun onDestroyView() {
@@ -63,8 +62,8 @@ class WatchlistFragment : MvpAppCompatFragment(R.layout.fragment_watchlist), Wat
         _binding = null
     }
 
-    override fun showWatchlist(movies: List<WatchlistViewModel>) {
-        adapter.replaceMovies(movies)
+    override fun showWatchlist(movies: List<MovieViewModel>) {
+//        adapter.replaceMovies(movies)
     }
 
     override fun setProgressBarVisibility(isVisible: Boolean) {
