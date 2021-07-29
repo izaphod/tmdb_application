@@ -13,13 +13,13 @@ data class MovieResponse(
     @SerializedName("release_date") val releaseDate: String? = null,
 )
 
-fun List<MovieResponse>.asDomainModel(): List<Movie> {
+fun List<MovieResponse>.asDomainModels(): List<Movie> {
     return map { movieResponse ->
-        movieResponse.asDomainModel()
+        movieResponse.asDomainModels()
     }
 }
 
-fun MovieResponse.asDomainModel(): Movie {
+fun MovieResponse.asDomainModels(): Movie {
     return Movie(
         movieId = id,
         title = title,

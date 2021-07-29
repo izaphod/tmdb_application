@@ -8,7 +8,11 @@ data class MovieViewModel(
     var isInWatchlist: Boolean = false
 )
 
-fun Movie.asMovieViewModel(): MovieViewModel {
+fun List<Movie>.asMovieViewModels(): List<MovieViewModel> {
+    return map { movie -> movie.asMovieViewModels() }
+}
+
+fun Movie.asMovieViewModels(): MovieViewModel {
     return MovieViewModel(movie = this)
 }
 

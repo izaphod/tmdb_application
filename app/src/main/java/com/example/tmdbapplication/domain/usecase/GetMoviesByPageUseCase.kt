@@ -6,8 +6,9 @@ import com.example.tmdbapplication.domain.repository.MovieDataSource
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 
-class GetMoviesUseCase {
+class GetMoviesByPageUseCase {
+
     fun execute(movieDataSource: MovieDataSource): Observable<PagingData<MovieResponse>> =
-        movieDataSource.fetchMovies()
+        movieDataSource.getMoviesByPage()
             .subscribeOn(Schedulers.io())
 }

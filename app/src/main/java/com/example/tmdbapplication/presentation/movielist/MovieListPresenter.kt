@@ -2,16 +2,16 @@ package com.example.tmdbapplication.presentation.movielist
 
 import android.util.Log
 import androidx.paging.map
-import com.example.tmdbapplication.data.network.model.asDomainModel
+import com.example.tmdbapplication.data.network.model.asDomainModels
 import com.example.tmdbapplication.presentation.model.MovieViewModel
 import com.example.tmdbapplication.domain.repository.MovieDataSource
 import com.example.tmdbapplication.domain.repository.WatchlistDataSource
 import com.example.tmdbapplication.domain.usecase.DeleteFromWatchlistUseCase
-import com.example.tmdbapplication.domain.usecase.GetMoviesUseCase
+import com.example.tmdbapplication.domain.usecase.GetMoviesByPageUseCase
 import com.example.tmdbapplication.domain.usecase.InsertToWatchlistUseCase
 import com.example.tmdbapplication.domain.usecase.IsInWatchlistUseCase
 import com.example.tmdbapplication.presentation.model.asWatchlistEntity
-import com.example.tmdbapplication.presentation.model.asMovieViewModel
+import com.example.tmdbapplication.presentation.model.asMovieViewModels
 import com.example.tmdbapplication.util.addTo
 import com.example.tmdbapplication.util.disposeIfNeeded
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -29,7 +29,7 @@ class MovieListPresenter @Inject constructor(
     private var deleteDisposable: Disposable? = null
 
     private val compositeDisposable = CompositeDisposable()
-    private val getMoviesUseCase = GetMoviesUseCase()
+    private val getMoviesByPageUseCase = GetMoviesByPageUseCase()
     private val isInWatchlistUseCase = IsInWatchlistUseCase()
     private val insertToWatchlistUseCase = InsertToWatchlistUseCase()
     private val deleteFromWatchlistUseCase = DeleteFromWatchlistUseCase()
@@ -37,16 +37,16 @@ class MovieListPresenter @Inject constructor(
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.setProgressBarVisibility(true)
-        getMoviesUseCase.execute(movieDataSource)
+        getMoviesByPageUseCase.execute(movieDataSource)
             .map { pagingData ->
                 pagingData.map { movieResponse ->
-                    movieResponse.asDomainModel()
+                    movieResponse.asDomainModels()
                 }
             }
             .map { pagingDataResponse ->
                 pagingDataResponse.map { movie ->
-                    Log.d(TAG, "onFirstViewAttach.getMoviesUseCase: ${movie.title}")
-                    movie.asMovieViewModel().also { movieViewModel ->
+                    Log.d(TAG, "onFirstViewAttach.getMoviesByPageUseCase: ${movie.title}")
+                    movie.asMovieViewModels().also { movieViewModel ->
                         isInWatchlistUseCase
                             .execute(watchlistDataSource, movieViewModel.movie.movieId)
                             .subscribe(
@@ -65,7 +65,7 @@ class MovieListPresenter @Inject constructor(
                 },
                 { t ->
                     viewState.setProgressBarVisibility(false)
-                    Log.e(TAG, "onFirstViewAttach.getMoviesUseCase:", t)
+                    Log.e(TAG, "onFirstViewAttach.getMoviesByPageUseCase:", t)
                 }
             )
             .addTo(compositeDisposable)

@@ -2,6 +2,7 @@ package com.example.tmdbapplication.presentation.watchlist
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,10 @@ import com.example.tmdbapplication.R
 import com.example.tmdbapplication.TmdbApplication
 import com.example.tmdbapplication.databinding.FragmentWatchlistBinding
 import com.example.tmdbapplication.presentation.model.MovieViewModel
+import com.example.tmdbapplication.presentation.watchlist.list.MovieItemAdapter
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
@@ -26,14 +31,10 @@ class WatchlistFragment : MvpAppCompatFragment(R.layout.fragment_watchlist), Wat
     private var _binding: FragmentWatchlistBinding? = null
     private val binding get() = _binding!!
 
-//    private val adapter = MovieItemAdapter(
-//        itemList = mutableListOf(),
-//        onMovieClick = { movie ->
-//
-//        }
-//    ) { movie, position ->
-//
-//    }
+    private val adapter = MovieItemAdapter(
+        movieList = mutableListOf(),
+        onMovieClick = { movie -> }
+    ) { movie -> presenter.onItemWatchlistPressed(movie) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -52,9 +53,9 @@ class WatchlistFragment : MvpAppCompatFragment(R.layout.fragment_watchlist), Wat
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        binding.recyclerViewWatchlist.adapter = adapter
-//        binding.recyclerViewWatchlist.layoutManager =
-//            GridLayoutManager(context, 3, RecyclerView.VERTICAL, false)
+        binding.recyclerViewWatchlist.adapter = adapter
+        binding.recyclerViewWatchlist.layoutManager =
+            GridLayoutManager(context, 3, RecyclerView.VERTICAL, false)
     }
 
     override fun onDestroyView() {
@@ -62,8 +63,8 @@ class WatchlistFragment : MvpAppCompatFragment(R.layout.fragment_watchlist), Wat
         _binding = null
     }
 
-    override fun showWatchlist(movies: List<MovieViewModel>) {
-//        adapter.replaceMovies(movies)
+    override fun onNewMovie(movies: List<MovieViewModel>) {
+        adapter.replaceMovies(movies)
     }
 
     override fun setProgressBarVisibility(isVisible: Boolean) {
@@ -72,5 +73,9 @@ class WatchlistFragment : MvpAppCompatFragment(R.layout.fragment_watchlist), Wat
 
     override fun setEmptyScreenVisibility(isVisible: Boolean) {
         binding.textViewEmptyWatchlist.isVisible = isVisible
+    }
+
+    companion object {
+        private const val TAG = "WatchlistFragment"
     }
 }
