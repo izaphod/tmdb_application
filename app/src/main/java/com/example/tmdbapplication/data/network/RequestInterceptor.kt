@@ -1,4 +1,4 @@
-package com.example.tmdbapplication.network
+package com.example.tmdbapplication.data.network
 
 import com.example.tmdbapplication.BuildConfig
 import okhttp3.Interceptor

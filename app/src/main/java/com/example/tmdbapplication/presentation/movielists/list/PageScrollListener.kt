@@ -3,7 +3,7 @@ package com.example.tmdbapplication.presentation.movielists.list
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-fun RecyclerView.onScrollToMiddle(
+fun RecyclerView.onScrollToEnd(
     linearLayoutManager: LinearLayoutManager,
     lastLoadedPage: Int,
     onScrolledTo: (Int) -> Unit

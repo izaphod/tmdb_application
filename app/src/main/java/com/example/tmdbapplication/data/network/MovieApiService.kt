@@ -1,7 +1,7 @@
-package com.example.tmdbapplication.network
+package com.example.tmdbapplication.data.network
 
-import com.example.tmdbapplication.network.model.MovieListResponse
-import com.example.tmdbapplication.network.model.MovieResponse
+import com.example.tmdbapplication.data.network.model.MovieListResponse
+import com.example.tmdbapplication.data.network.model.MovieResponse
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 import retrofit2.http.Path

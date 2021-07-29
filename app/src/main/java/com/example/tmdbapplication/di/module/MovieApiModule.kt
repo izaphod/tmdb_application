@@ -1,7 +1,7 @@
 package com.example.tmdbapplication.di.module
 
-import com.example.tmdbapplication.network.MovieApiService
-import com.example.tmdbapplication.network.RequestInterceptor
+import com.example.tmdbapplication.data.network.MovieApiService
+import com.example.tmdbapplication.data.network.RequestInterceptor
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient

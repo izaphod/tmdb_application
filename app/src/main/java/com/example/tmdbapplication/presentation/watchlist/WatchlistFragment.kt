@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdbapplication.R
 import com.example.tmdbapplication.TmdbApplication
 import com.example.tmdbapplication.databinding.FragmentWatchlistBinding
-import com.example.tmdbapplication.presentation.model.MovieUiModel
+import com.example.tmdbapplication.presentation.model.WatchlistViewModel
 import com.example.tmdbapplication.presentation.movielists.list.MovieItemAdapter
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -28,7 +28,7 @@ class WatchlistFragment : MvpAppCompatFragment(R.layout.fragment_watchlist), Wat
     private val binding get() = _binding!!
 
     private val adapter = MovieItemAdapter(
-        movieList = mutableListOf(),
+        itemList = mutableListOf(),
         onMovieClick = { movie ->
 
         }
@@ -63,7 +63,7 @@ class WatchlistFragment : MvpAppCompatFragment(R.layout.fragment_watchlist), Wat
         _binding = null
     }
 
-    override fun showWatchlist(movies: List<MovieUiModel>) {
+    override fun showWatchlist(movies: List<WatchlistViewModel>) {
         adapter.replaceMovies(movies)
     }
 

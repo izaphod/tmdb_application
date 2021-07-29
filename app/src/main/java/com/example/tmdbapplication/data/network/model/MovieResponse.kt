@@ -1,7 +1,6 @@
-package com.example.tmdbapplication.network.model
+package com.example.tmdbapplication.data.network.model
 
 import com.example.tmdbapplication.domain.model.Movie
-import com.example.tmdbapplication.presentation.model.MovieUiModel
 import com.google.gson.annotations.SerializedName
 
 data class MovieResponse(
@@ -14,9 +13,9 @@ data class MovieResponse(
     @SerializedName("release_date") val releaseDate: String? = null,
 )
 
-fun List<MovieResponse>.asUiModel(): List<MovieUiModel> {
+fun List<MovieResponse>.asDomainModel(): List<Movie> {
     return map { movieResponse ->
-        MovieUiModel(movie = MovieResponseMapper.mapToDomain(movieResponse))
+        MovieResponseMapper.mapToDomain(movieResponse)
     }
 }
 

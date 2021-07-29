@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription"
-            tools:src="@drawable/poster" />
+            tools:src="@drawable/poster_img" />
 
         <com.example.tmdbapplication.customview.MovieUserScoreView
             android:id="@+id/movie_rating"

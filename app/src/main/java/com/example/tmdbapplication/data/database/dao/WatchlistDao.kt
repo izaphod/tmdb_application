@@ -1,10 +1,10 @@
-package com.example.tmdbapplication.database.dao
+package com.example.tmdbapplication.data.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.tmdbapplication.database.entity.WatchlistEntity
+import com.example.tmdbapplication.data.database.entity.WatchlistEntity
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single

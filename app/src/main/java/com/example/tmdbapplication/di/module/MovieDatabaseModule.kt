@@ -2,8 +2,8 @@ package com.example.tmdbapplication.di.module
 
 import android.content.Context
 import androidx.room.Room
-import com.example.tmdbapplication.database.MovieDatabase
-import com.example.tmdbapplication.database.dao.MovieDao
+import com.example.tmdbapplication.data.database.MovieDatabase
+import com.example.tmdbapplication.data.database.dao.WatchlistDao
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -21,5 +21,5 @@ class MovieDatabaseModule {
 
     @Provides
     @Singleton
-    fun provideMovieDao(database: MovieDatabase): MovieDao = database.movieDao()
+    fun provideWatchlistDao(database: MovieDatabase): WatchlistDao = database.watchlistDao()
 }
