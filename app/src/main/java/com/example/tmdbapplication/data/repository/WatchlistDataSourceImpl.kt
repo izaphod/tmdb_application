@@ -12,16 +12,17 @@ class WatchlistDataSourceImpl @Inject constructor(
     private val movieDatabase: MovieDatabase
 ) : WatchlistDataSource {
 
-    override fun insert(watchlistEntity: WatchlistEntity): Completable {
-        return movieDatabase.watchlistDao().insertMovie(watchlistEntity)
+    override fun insert(movieId: Long): Completable {
+        return movieDatabase.watchlistDao().insertMovie(WatchlistEntity(movieId = movieId))
     }
 
     override fun delete(movieId: Long): Completable {
         return movieDatabase.watchlistDao().deleteMovie(movieId)
     }
 
-    override fun getWatchlist(): Observable<List<WatchlistEntity>> {
+    override fun getWatchlist(): Observable<List<Long>> {
         return movieDatabase.watchlistDao().getWatchlist()
+            .map { it.map { watchlistEntity -> watchlistEntity.movieId } }
     }
 
     override fun isInWatchlist(movieId: Long): Single<Boolean> {

@@ -2,7 +2,6 @@ package com.example.tmdbapplication.presentation.movielist
 
 import android.util.Log
 import androidx.paging.map
-import com.example.tmdbapplication.data.network.model.asDomainModels
 import com.example.tmdbapplication.presentation.model.MovieViewModel
 import com.example.tmdbapplication.domain.repository.MovieDataSource
 import com.example.tmdbapplication.domain.repository.WatchlistDataSource
@@ -10,7 +9,6 @@ import com.example.tmdbapplication.domain.usecase.DeleteFromWatchlistUseCase
 import com.example.tmdbapplication.domain.usecase.GetMoviesByPageUseCase
 import com.example.tmdbapplication.domain.usecase.InsertToWatchlistUseCase
 import com.example.tmdbapplication.domain.usecase.IsInWatchlistUseCase
-import com.example.tmdbapplication.presentation.model.asWatchlistEntity
 import com.example.tmdbapplication.presentation.model.asMovieViewModels
 import com.example.tmdbapplication.util.addTo
 import com.example.tmdbapplication.util.disposeIfNeeded
@@ -38,13 +36,8 @@ class MovieListPresenter @Inject constructor(
         super.onFirstViewAttach()
         viewState.setProgressBarVisibility(true)
         getMoviesByPageUseCase.execute(movieDataSource)
-            .map { pagingData ->
-                pagingData.map { movieResponse ->
-                    movieResponse.asDomainModels()
-                }
-            }
-            .map { pagingDataResponse ->
-                pagingDataResponse.map { movie ->
+            .map { pagingDataDomain ->
+                pagingDataDomain.map { movie ->
                     Log.d(TAG, "onFirstViewAttach.getMoviesByPageUseCase: ${movie.title}")
                     movie.asMovieViewModels().also { movieViewModel ->
                         isInWatchlistUseCase
@@ -96,7 +89,7 @@ class MovieListPresenter @Inject constructor(
         } else {
             insertDisposable?.disposeIfNeeded(compositeDisposable)
             insertDisposable = insertToWatchlistUseCase
-                .execute(watchlistDataSource, movieViewModel.asWatchlistEntity())
+                .execute(watchlistDataSource, movieViewModel.movie.movieId)
                 .subscribe(
                     {
                         Log.d(
@@ -111,6 +104,6 @@ class MovieListPresenter @Inject constructor(
     }
 
     companion object {
-        private const val TAG = "MovieListsPresenter"
+        private const val TAG = "MovieListPresenter"
     }
 }

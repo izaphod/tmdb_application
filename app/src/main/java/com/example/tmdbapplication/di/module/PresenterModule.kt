@@ -3,6 +3,7 @@ package com.example.tmdbapplication.di.module
 import com.example.tmdbapplication.presentation.movielist.MovieListPresenter
 import com.example.tmdbapplication.domain.repository.MovieDataSource
 import com.example.tmdbapplication.domain.repository.WatchlistDataSource
+import com.example.tmdbapplication.presentation.watchlist.WatchlistPresenter
 import dagger.Module
 import dagger.Provides
 
@@ -14,4 +15,10 @@ class PresenterModule {
         movieMovieDataSource: MovieDataSource,
         watchlistDataSource: WatchlistDataSource
     ): MovieListPresenter = MovieListPresenter(movieMovieDataSource, watchlistDataSource)
+
+    @Provides
+    fun provideWatchlistPresenter(
+        movieMovieDataSource: MovieDataSource,
+        watchlistDataSource: WatchlistDataSource
+    ): WatchlistPresenter = WatchlistPresenter(movieMovieDataSource, watchlistDataSource)
 }

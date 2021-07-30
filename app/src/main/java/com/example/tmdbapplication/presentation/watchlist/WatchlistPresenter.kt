@@ -1,7 +1,6 @@
 package com.example.tmdbapplication.presentation.watchlist
 
 import android.util.Log
-import com.example.tmdbapplication.data.network.model.asDomainModels
 import com.example.tmdbapplication.domain.repository.MovieDataSource
 import com.example.tmdbapplication.domain.repository.WatchlistDataSource
 import com.example.tmdbapplication.domain.usecase.DeleteFromWatchlistUseCase
@@ -31,7 +30,6 @@ class WatchlistPresenter @Inject constructor(
         super.onFirstViewAttach()
         viewState.setProgressBarVisibility(true)
         getMoviesByIdUseCase.execute(watchlistDataSource, movieDataSource)
-            .map { movieResponses -> movieResponses.asDomainModels() }
             .map { movies ->
                 movies.asMovieViewModels().onEach { movieViewModel ->
                     movieViewModel.isInWatchlist = true
