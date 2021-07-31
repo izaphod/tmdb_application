@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import javax.inject.Inject
@@ -57,6 +58,7 @@ class MovieListFragment : MvpAppCompatFragment(R.layout.fragment_movie_list), Mo
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
         initListeners()
+        addLoadStateListener()
         Log.d(TAG, "onViewCreated")
     }
 
@@ -69,11 +71,6 @@ class MovieListFragment : MvpAppCompatFragment(R.layout.fragment_movie_list), Mo
     override fun onNewMovies(pagingData: PagingData<MovieViewModel>) {
         movieItemAdapter.submitData(lifecycle, pagingData)
         Log.d(TAG, "onNewMovies")
-    }
-
-    override fun setProgressBarVisibility(isVisible: Boolean) {
-        binding.progressBar.layoutProgressBar.isVisible = isVisible
-        Log.d(TAG, "setProgressBarVisibility: $isVisible")
     }
 
     private fun initRecyclerView() {
@@ -97,6 +94,23 @@ class MovieListFragment : MvpAppCompatFragment(R.layout.fragment_movie_list), Mo
             }
             false
         }
+
+    }
+
+    private fun addLoadStateListener() {
+        movieItemAdapter.addLoadStateListener {
+            if (it.refresh is LoadState.Loading) {
+                setProgressBarVisibility(true)
+            } else {
+                setProgressBarVisibility(false)
+                // TODO: 7/31/21 add error state
+            }
+        }
+    }
+
+    private fun setProgressBarVisibility(isVisible: Boolean) {
+        binding.progressBar.layoutProgressBar.isVisible = isVisible
+        Log.d(TAG, "setProgressBarVisibility: $isVisible")
     }
 
     companion object {

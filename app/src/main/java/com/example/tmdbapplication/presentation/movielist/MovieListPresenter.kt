@@ -32,9 +32,12 @@ class MovieListPresenter @Inject constructor(
     private val insertToWatchlistUseCase = InsertToWatchlistUseCase()
     private val deleteFromWatchlistUseCase = DeleteFromWatchlistUseCase()
 
+    // TODO: 7/31/21 Exception after screen rotate:
+    //  java.lang.IllegalStateException: Attempt to collect twice from pageEventFlow,
+    //  which is an illegal operation.
+    //  Did you forget to call Flow<PagingData<*>>.cachedIn(coroutineScope)?
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        viewState.setProgressBarVisibility(true)
         getMoviesByPageUseCase.execute(movieDataSource)
             .map { pagingDataDomain ->
                 pagingDataDomain.map { movie ->
@@ -52,14 +55,8 @@ class MovieListPresenter @Inject constructor(
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { pagingDataViewModel ->
-                    viewState.setProgressBarVisibility(false)
-                    viewState.onNewMovies(pagingDataViewModel)
-                },
-                { t ->
-                    viewState.setProgressBarVisibility(false)
-                    Log.e(TAG, "onFirstViewAttach.getMoviesByPageUseCase:", t)
-                }
+                { pagingDataViewModel -> viewState.onNewMovies(pagingDataViewModel) },
+                { t -> Log.e(TAG, "onFirstViewAttach.getMoviesByPageUseCase:", t) }
             )
             .addTo(compositeDisposable)
         Log.d(TAG, "onFirstViewAttach")

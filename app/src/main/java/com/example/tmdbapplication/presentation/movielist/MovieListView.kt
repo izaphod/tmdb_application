@@ -10,7 +10,4 @@ interface MovieListView : MvpView {
 
     @StateStrategyType(value = AddToEndSingleStrategy::class)
     fun onNewMovies(pagingData: PagingData<MovieViewModel>)
-
-    @StateStrategyType(value = AddToEndSingleStrategy::class)
-    fun setProgressBarVisibility(isVisible: Boolean)
 }
