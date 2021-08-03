@@ -46,7 +46,7 @@ class SearchMoviePresenter @Inject constructor(
         compositeDisposable.dispose()
     }
 
-    // TODO: 8/3/21 Exception after screen rotate:
+    // TODO: 8/3/21 Exception when view destroyed:
     //  java.lang.IllegalStateException: Attempt to collect twice from pageEventFlow,
     //  which is an illegal operation.
     //  Did you forget to call Flow<PagingData<*>>.cachedIn(coroutineScope)?
@@ -82,7 +82,7 @@ class SearchMoviePresenter @Inject constructor(
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                             { pagingDataViewModel ->
-                                viewState.onNewSearchResult(pagingDataViewModel)
+                                viewState.showSearchResult(pagingDataViewModel)
                                 viewState.setEmptyScreenVisibility(false)
                             },
                             { t -> Log.e(TAG, "onSearchPressed.searchMovieUseCase:", t) }

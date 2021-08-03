@@ -10,7 +10,7 @@ import moxy.viewstate.strategy.StateStrategyType
 interface SearchMovieView : MvpView {
 
     @StateStrategyType(value = AddToEndStrategy::class)
-    fun onNewSearchResult(pagingData: PagingData<MovieViewModel>)
+    fun showSearchResult(pagingData: PagingData<MovieViewModel>)
 
     @StateStrategyType(value = AddToEndStrategy::class)
     fun setEmptyScreenVisibility(isVisible: Boolean)

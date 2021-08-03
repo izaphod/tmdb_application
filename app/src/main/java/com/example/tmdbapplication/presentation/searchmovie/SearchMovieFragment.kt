@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
@@ -32,7 +33,12 @@ class SearchMovieFragment : MvpAppCompatFragment(R.layout.fragment_search_movie)
     private val binding get() = _binding!!
 
     private val searchResultAdapter = MoviePagingAdapter(
-        onMovieClick = { movie ->  }
+        onMovieClick = { movie ->
+            findNavController().navigate(
+                SearchMovieFragmentDirections
+                    .actionSearchMovieFragmentToMovieDetailsFragment(movie)
+            )
+        }
     ) { movie -> presenter.onItemWatchlistPressed(movie) }
 
     override fun onAttach(context: Context) {
@@ -56,7 +62,7 @@ class SearchMovieFragment : MvpAppCompatFragment(R.layout.fragment_search_movie)
         addLoadStateListener()
     }
 
-    override fun onNewSearchResult(pagingData: PagingData<MovieViewModel>) {
+    override fun showSearchResult(pagingData: PagingData<MovieViewModel>) {
         searchResultAdapter.submitData(lifecycle, pagingData)
     }
 
@@ -86,7 +92,7 @@ class SearchMovieFragment : MvpAppCompatFragment(R.layout.fragment_search_movie)
 
     private fun addLoadStateListener() {
         searchResultAdapter.addLoadStateListener { loadStates ->
-            if (loadStates.refresh is LoadState.Loading ) {
+            if (loadStates.refresh is LoadState.Loading) {
                 binding.progress.layoutProgressBar.setVisibility(true)
             } else {
                 binding.progress.layoutProgressBar.setVisibility(false)

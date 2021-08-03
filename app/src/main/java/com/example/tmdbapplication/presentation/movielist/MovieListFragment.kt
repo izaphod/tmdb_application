@@ -32,8 +32,11 @@ class MovieListFragment : MvpAppCompatFragment(R.layout.fragment_movie_list), Mo
     private val binding get() = _binding!!
 
     private val movieItemAdapter = MoviePagingAdapter(
-        onMovieClick = {
-
+        onMovieClick = { movie ->
+            findNavController().navigate(
+                MovieListFragmentDirections
+                    .actionMovieListFragmentToMovieDetailsFragment(movie)
+            )
         }
     ) { movie -> presenter.onItemWatchlistPressed(movie) }
 
@@ -67,7 +70,7 @@ class MovieListFragment : MvpAppCompatFragment(R.layout.fragment_movie_list), Mo
         Log.d(TAG, "onDestroyView")
     }
 
-    override fun onNewMovies(pagingData: PagingData<MovieViewModel>) {
+    override fun showMovies(pagingData: PagingData<MovieViewModel>) {
         movieItemAdapter.submitData(lifecycle, pagingData)
         Log.d(TAG, "onNewMovies")
     }

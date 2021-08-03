@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdbapplication.R
@@ -29,7 +30,12 @@ class WatchlistFragment : MvpAppCompatFragment(R.layout.fragment_watchlist), Wat
 
     private val adapter = MovieItemAdapter(
         movieList = mutableListOf(),
-        onMovieClick = { movie -> }
+        onMovieClick = { movie ->
+            findNavController().navigate(
+                WatchlistFragmentDirections
+                    .actionWatchlistFragmentToMovieDetailsFragment(movie)
+            )
+        }
     ) { movie -> presenter.onItemWatchlistPressed(movie) }
 
     override fun onAttach(context: Context) {

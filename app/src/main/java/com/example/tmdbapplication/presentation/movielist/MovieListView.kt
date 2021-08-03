@@ -9,5 +9,5 @@ import moxy.viewstate.strategy.StateStrategyType
 interface MovieListView : MvpView {
 
     @StateStrategyType(value = AddToEndSingleStrategy::class)
-    fun onNewMovies(pagingData: PagingData<MovieViewModel>)
+    fun showMovies(pagingData: PagingData<MovieViewModel>)
 }

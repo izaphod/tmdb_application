@@ -32,7 +32,7 @@ class MovieListPresenter @Inject constructor(
     private val insertToWatchlistUseCase = InsertToWatchlistUseCase()
     private val deleteFromWatchlistUseCase = DeleteFromWatchlistUseCase()
 
-    // TODO: 7/31/21 Exception after screen rotate:
+    // TODO: 7/31/21 Exception when view destroyed:
     //  java.lang.IllegalStateException: Attempt to collect twice from pageEventFlow,
     //  which is an illegal operation.
     //  Did you forget to call Flow<PagingData<*>>.cachedIn(coroutineScope)?
@@ -55,7 +55,7 @@ class MovieListPresenter @Inject constructor(
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { pagingDataViewModel -> viewState.onNewMovies(pagingDataViewModel) },
+                { pagingDataViewModel -> viewState.showMovies(pagingDataViewModel) },
                 { t -> Log.e(TAG, "onFirstViewAttach.getMoviesByPageUseCase:", t) }
             )
             .addTo(compositeDisposable)
