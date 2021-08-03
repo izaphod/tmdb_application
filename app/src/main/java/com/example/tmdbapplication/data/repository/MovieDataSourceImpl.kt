@@ -7,7 +7,8 @@ import androidx.paging.map
 import androidx.paging.rxjava3.observable
 import com.example.tmdbapplication.data.network.MovieApiService
 import com.example.tmdbapplication.data.network.model.asDomainModel
-import com.example.tmdbapplication.data.pager.MoviePagingSource
+import com.example.tmdbapplication.data.paging.MoviePagingSource
+import com.example.tmdbapplication.data.paging.SearchPagingSource
 import com.example.tmdbapplication.domain.model.Movie
 import com.example.tmdbapplication.domain.repository.MovieDataSource
 import io.reactivex.rxjava3.core.Observable
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 class MovieDataSourceImpl @Inject constructor(
     private val moviePagingSource: MoviePagingSource,
-    private val movieApiService: MovieApiService
+    private val movieApiService: MovieApiService,
+    private val searchPagingSource: SearchPagingSource
 ) : MovieDataSource {
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -33,15 +35,28 @@ class MovieDataSourceImpl @Inject constructor(
             pagingSourceFactory = { moviePagingSource }
         )
             .observable
-            .map { pagingData ->
-            pagingData.map { movieResponse ->
-                movieResponse.asDomainModel()
-            }
-        }
+            .map { pagingData -> pagingData.map { movieResponse -> movieResponse.asDomainModel() } }
     }
 
     override fun getMovieById(movieId: Long): Single<Movie> {
         return movieApiService.getMovieById(movieId)
             .map { it.asDomainModel() }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun searchMovie(query: String): Observable<PagingData<Movie>> {
+        searchPagingSource.setQuery(query)
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = true,
+                maxSize = 30,
+                prefetchDistance = 5,
+                initialLoadSize = 40
+            ),
+            pagingSourceFactory = { searchPagingSource }
+        )
+            .observable
+            .map { pagingData -> pagingData.map { movieResponse -> movieResponse.asDomainModel() } }
     }
 }

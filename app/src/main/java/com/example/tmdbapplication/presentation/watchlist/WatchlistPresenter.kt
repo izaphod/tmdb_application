@@ -28,7 +28,7 @@ class WatchlistPresenter @Inject constructor(
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        viewState.setProgressBarVisibility(true)
+        viewState.setProgressVisibility(true)
         getMoviesByIdUseCase.execute(watchlistDataSource, movieDataSource)
             .map { movies ->
                 movies.asMovieViewModels().onEach { movieViewModel ->
@@ -38,11 +38,11 @@ class WatchlistPresenter @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { movieViewModels ->
-                    viewState.setProgressBarVisibility(false)
+                    viewState.setProgressVisibility(false)
                     viewState.onNewMovie(movieViewModels)
                 },
                 { t ->
-                    viewState.setProgressBarVisibility(false)
+                    viewState.setProgressVisibility(false)
                     Log.e(TAG, "onFirstViewAttach.getMovieByIdUseCase:", t)
                 }
             )

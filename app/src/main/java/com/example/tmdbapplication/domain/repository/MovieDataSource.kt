@@ -10,4 +10,6 @@ interface MovieDataSource {
     fun getMoviesByPage(): Observable<PagingData<Movie>>
 
     fun getMovieById(movieId: Long): Single<Movie>
+
+    fun searchMovie(query: String): Observable<PagingData<Movie>>
 }

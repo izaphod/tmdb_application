@@ -4,11 +4,11 @@
     <!--Start Strings used for fragments navigation-->
     <string name="fragment_movie_list_label">Movies</string>
     <string name="fragment_movie_details_label">Movie Details</string>
-    <string name="fragment_search_movies_label">Search Movies</string>
+    <string name="fragment_search_movie_label">Search Movies</string>
     <string name="fragment_watchlist_label">Watchlist</string>
     <!--End Strings used for fragments navigation-->
 
-    <!--Start Fragment movie lists-->
+    <!--Start Fragment movie list-->
     <string name="popular_movies">Popular movies</string>
     <string name="top_rated_movies">Top rated movies</string>
     <string name="upcoming_movies">Upcoming movies</string>
@@ -18,20 +18,20 @@
     <string name="bottom_navigation_home">Home</string>
     <string name="added_to_watchlist">%s added to watchlist</string>
     <string name="deleted_from_watchlist">%s deleted from watchlist</string>
-    <!--End Fragment movie lists-->
+    <!--End Fragment movie list-->
 
     <!--Start Fragment movie details-->
     <string name="overview">Overview</string>
     <string name="user_score">User Score</string>
     <!--End Fragment movie details-->
 
-    <!--Start Fragment search movies-->
-    <string name="sm_toolbar_title">Search movies - TMDB</string>
+    <!--Start Fragment search movie-->
+    <string name="sm_toolbar_title">Search movie - TMDB</string>
     <string name="edit_text_movie">Movie title</string>
     <string name="sm_text_view_empty">Enter the title of the movie in the search box
         and click search button on keyboard</string>
     <string name="empty_query_toast">Enter movie title first</string>
-    <!--End Fragment search movies-->
+    <!--End Fragment search movie-->
 
     <!--Start Fragment watchlist-->
     <string name="wl_toolbar_title">My Watchlist - TMDB</string>

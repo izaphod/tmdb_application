@@ -11,7 +11,7 @@ interface WatchlistView : MvpView {
     fun onNewMovie(movies: List<MovieViewModel>)
 
     @StateStrategyType(value = AddToEndSingleStrategy::class)
-    fun setProgressBarVisibility(isVisible: Boolean)
+    fun setProgressVisibility(isVisible: Boolean)
 
     @StateStrategyType(value = AddToEndSingleStrategy::class)
     fun setEmptyScreenVisibility(isVisible: Boolean)

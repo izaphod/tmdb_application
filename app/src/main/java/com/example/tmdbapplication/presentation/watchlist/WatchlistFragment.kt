@@ -2,11 +2,9 @@ package com.example.tmdbapplication.presentation.watchlist
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdbapplication.R
@@ -14,9 +12,7 @@ import com.example.tmdbapplication.TmdbApplication
 import com.example.tmdbapplication.databinding.FragmentWatchlistBinding
 import com.example.tmdbapplication.presentation.model.MovieViewModel
 import com.example.tmdbapplication.presentation.watchlist.list.MovieItemAdapter
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.schedulers.Schedulers
+import com.example.tmdbapplication.util.setVisibility
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import javax.inject.Inject
@@ -53,8 +49,8 @@ class WatchlistFragment : MvpAppCompatFragment(R.layout.fragment_watchlist), Wat
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.recyclerViewWatchlist.adapter = adapter
-        binding.recyclerViewWatchlist.layoutManager =
+        binding.watchlistList.adapter = adapter
+        binding.watchlistList.layoutManager =
             GridLayoutManager(context, 3, RecyclerView.VERTICAL, false)
     }
 
@@ -67,12 +63,12 @@ class WatchlistFragment : MvpAppCompatFragment(R.layout.fragment_watchlist), Wat
         adapter.replaceMovies(movies)
     }
 
-    override fun setProgressBarVisibility(isVisible: Boolean) {
-        binding.progressBar.layoutProgressBar.isVisible = isVisible
+    override fun setProgressVisibility(isVisible: Boolean) {
+        binding.progress.layoutProgressBar.setVisibility(isVisible)
     }
 
     override fun setEmptyScreenVisibility(isVisible: Boolean) {
-        binding.textViewEmptyWatchlist.isVisible = isVisible
+        binding.emptyWatchlist.setVisibility(isVisible)
     }
 
     companion object {

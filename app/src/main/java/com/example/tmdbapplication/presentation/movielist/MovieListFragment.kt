@@ -6,7 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
@@ -20,14 +20,13 @@ import com.example.tmdbapplication.TmdbApplication
 import com.example.tmdbapplication.databinding.FragmentMovieListBinding
 import com.example.tmdbapplication.presentation.model.MovieViewModel
 import com.example.tmdbapplication.presentation.movielist.list.MoviePagingAdapter
+import com.example.tmdbapplication.util.setVisibility
 
 class MovieListFragment : MvpAppCompatFragment(R.layout.fragment_movie_list), MovieListView {
 
     @Inject
     lateinit var presenterProvider: Provider<MovieListPresenter>
     private val presenter: MovieListPresenter by moxyPresenter { presenterProvider.get() }
-
-    private lateinit var movieLayoutManager: LinearLayoutManager
 
     private var _binding: FragmentMovieListBinding? = null
     private val binding get() = _binding!!
@@ -74,10 +73,9 @@ class MovieListFragment : MvpAppCompatFragment(R.layout.fragment_movie_list), Mo
     }
 
     private fun initRecyclerView() {
-        binding.recyclerViewPopularMovies.adapter = movieItemAdapter
-        movieLayoutManager =
+        binding.popularMoviesList.adapter = movieItemAdapter
+        binding.popularMoviesList.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.recyclerViewPopularMovies.layoutManager = movieLayoutManager
     }
 
     private fun initListeners() {
@@ -91,6 +89,12 @@ class MovieListFragment : MvpAppCompatFragment(R.layout.fragment_movie_list), Mo
                         )
                     return@setOnMenuItemClickListener true
                 }
+                R.id.search -> {
+                    findNavController().navigate(
+                        MovieListFragmentDirections
+                            .actionMovieListFragmentToSearchMovieFragment()
+                    )
+                }
             }
             false
         }
@@ -98,19 +102,23 @@ class MovieListFragment : MvpAppCompatFragment(R.layout.fragment_movie_list), Mo
     }
 
     private fun addLoadStateListener() {
-        movieItemAdapter.addLoadStateListener {
-            if (it.refresh is LoadState.Loading) {
-                setProgressBarVisibility(true)
+        movieItemAdapter.addLoadStateListener { loadStates ->
+            if (loadStates.refresh is LoadState.Loading) {
+                binding.progress.layoutProgressBar.setVisibility(true)
             } else {
-                setProgressBarVisibility(false)
-                // TODO: 7/31/21 add error state
+                binding.progress.layoutProgressBar.setVisibility(false)
+                // TODO: 7/31/21 add error state screen
+                val errorState = when {
+                    loadStates.prepend is LoadState.Error -> loadStates.prepend as LoadState.Error
+                    loadStates.append is LoadState.Error -> loadStates.append as LoadState.Error
+                    loadStates.refresh is LoadState.Error -> loadStates.refresh as LoadState.Error
+                    else -> null
+                }
+                errorState?.let {
+                    Toast.makeText(this.context, it.error.message, Toast.LENGTH_LONG).show()
+                }
             }
         }
-    }
-
-    private fun setProgressBarVisibility(isVisible: Boolean) {
-        binding.progressBar.layoutProgressBar.isVisible = isVisible
-        Log.d(TAG, "setProgressBarVisibility: $isVisible")
     }
 
     companion object {

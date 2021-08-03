@@ -13,10 +13,18 @@
         <action
             android:id="@+id/action_movie_list_fragment_to_watchlist_fragment"
             app:destination="@id/watchlist_fragment" />
+        <action
+            android:id="@+id/action_movie_list_fragment_to_search_movie_fragment"
+            app:destination="@id/search_movie_fragment" />
     </fragment>
     <fragment
         android:id="@+id/watchlist_fragment"
         android:name="com.example.tmdbapplication.presentation.watchlist.WatchlistFragment"
         android:label="@string/fragment_watchlist_label"
         tools:layout="@layout/fragment_watchlist"/>
+    <fragment
+        android:id="@+id/search_movie_fragment"
+        android:name="com.example.tmdbapplication.presentation.searchmovie.SearchMovieFragment"
+        android:label="@string/fragment_search_movie_label"
+        tools:layout="@layout/fragment_search_movie"/>
 </navigation>

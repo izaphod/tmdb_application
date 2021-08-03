@@ -24,4 +24,10 @@ interface MovieApiService {
     fun getMovieById(
         @Path("movie_id") movieId: Long
     ): Single<MovieResponse>
+
+    @GET("search/movie")
+    fun searchMovie(
+        @Query("query") query: String,
+        @Query("page") page: Int
+    ): Single<MovieListResponse>
 }

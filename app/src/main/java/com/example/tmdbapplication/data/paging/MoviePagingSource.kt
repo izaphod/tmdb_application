@@ -1,4 +1,4 @@
-package com.example.tmdbapplication.data.pager
+package com.example.tmdbapplication.data.paging
 
 import androidx.paging.PagingState
 import androidx.paging.rxjava3.RxPagingSource

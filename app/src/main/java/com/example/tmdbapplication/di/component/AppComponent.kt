@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.tmdbapplication.TmdbApplication
 import com.example.tmdbapplication.di.module.PresenterModule
 import com.example.tmdbapplication.presentation.movielist.MovieListFragment
+import com.example.tmdbapplication.presentation.searchmovie.SearchMovieFragment
 import com.example.tmdbapplication.presentation.watchlist.WatchlistFragment
 import dagger.BindsInstance
 import dagger.Component
@@ -23,4 +24,5 @@ interface AppComponent : AndroidInjector<TmdbApplication> {
 
     fun injectFragment(fragment: MovieListFragment)
     fun injectFragment(fragment: WatchlistFragment)
+    fun injectFragment(fragment: SearchMovieFragment)
 }
