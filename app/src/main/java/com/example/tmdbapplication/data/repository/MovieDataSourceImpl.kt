@@ -17,9 +17,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
 class MovieDataSourceImpl @Inject constructor(
-    private val moviePagingSource: MoviePagingSource,
-    private val movieApiService: MovieApiService,
-    private val searchPagingSource: SearchPagingSource
+    private val movieApiService: MovieApiService
 ) : MovieDataSource {
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -32,7 +30,7 @@ class MovieDataSourceImpl @Inject constructor(
                 prefetchDistance = 5,
                 initialLoadSize = 40
             ),
-            pagingSourceFactory = { moviePagingSource }
+            pagingSourceFactory = { MoviePagingSource(movieApiService) }
         )
             .observable
             .map { pagingData -> pagingData.map { movieResponse -> movieResponse.asDomainModel() } }
@@ -45,7 +43,6 @@ class MovieDataSourceImpl @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun searchMovie(query: String): Observable<PagingData<Movie>> {
-        searchPagingSource.setQuery(query)
         return Pager(
             config = PagingConfig(
                 pageSize = 20,
@@ -54,7 +51,7 @@ class MovieDataSourceImpl @Inject constructor(
                 prefetchDistance = 5,
                 initialLoadSize = 40
             ),
-            pagingSourceFactory = { searchPagingSource }
+            pagingSourceFactory = { SearchPagingSource(movieApiService, query) }
         )
             .observable
             .map { pagingData -> pagingData.map { movieResponse -> movieResponse.asDomainModel() } }

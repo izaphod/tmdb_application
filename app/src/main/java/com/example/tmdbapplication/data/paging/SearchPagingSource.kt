@@ -7,13 +7,11 @@ import com.example.tmdbapplication.data.network.model.MovieListResponse
 import com.example.tmdbapplication.data.network.model.MovieResponse
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
-import javax.inject.Inject
 
-class SearchPagingSource @Inject constructor(
-    private val movieApiService: MovieApiService
+class SearchPagingSource (
+    private val movieApiService: MovieApiService,
+    private val query: String
 ) : RxPagingSource<Int, MovieResponse>() {
-
-    private var query = ""
 
     override fun getRefreshKey(state: PagingState<Int, MovieResponse>): Int? {
         return state.anchorPosition?.let {
@@ -28,10 +26,6 @@ class SearchPagingSource @Inject constructor(
         return movieApiService.searchMovies(query, page)
             .subscribeOn(Schedulers.io())
             .map { toLoadResult(it, page) }
-    }
-
-    fun setQuery(newQuery: String) {
-        query = newQuery
     }
 
     private fun toLoadResult(data: MovieListResponse, page: Int): LoadResult<Int, MovieResponse> {

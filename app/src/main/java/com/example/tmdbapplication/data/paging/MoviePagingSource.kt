@@ -7,9 +7,8 @@ import com.example.tmdbapplication.data.network.model.MovieListResponse
 import com.example.tmdbapplication.data.network.model.MovieResponse
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
-import javax.inject.Inject
 
-class MoviePagingSource @Inject constructor(
+class MoviePagingSource (
     private val movieApiService: MovieApiService
 ) : RxPagingSource<Int, MovieResponse>() {
 
