@@ -18,7 +18,7 @@
         app:titleTextColor="?attr/colorOnPrimary" />
 
     <include
-        android:id="@+id/progress"
+        android:id="@+id/movie_list_progress"
         layout="@layout/layout_progressbar"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -27,8 +27,8 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:visibility="gone" />
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -67,51 +67,61 @@
                 tools:listitem="@layout/movie_item"
                 tools:orientation="horizontal" />
 
-            <!--            <TextView-->
-            <!--                android:id="@+id/top_rated_movies_header"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginHorizontal="16dp"-->
-            <!--                android:layout_marginTop="8dp"-->
-            <!--                android:text="@string/top_rated_movies"-->
-            <!--                android:textStyle="bold"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/popular_movies_list" />-->
+            <TextView
+                android:id="@+id/now_playing_movies_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/now_playing_movies"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/popular_movies_list" />
 
-            <!--            <androidx.recyclerview.widget.RecyclerView-->
-            <!--                android:id="@+id/top_rated_movies_list"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginHorizontal="16dp"-->
-            <!--                android:layout_marginTop="8dp"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/top_rated_movies_header" />-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/now_playing_movies_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:clipToPadding="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/now_playing_movies_header"
+                tools:itemCount="4"
+                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/movie_item"
+                tools:orientation="horizontal" />
 
-            <!--            <TextView-->
-            <!--                android:id="@+id/upcoming_movies_header"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginHorizontal="16dp"-->
-            <!--                android:layout_marginTop="8dp"-->
-            <!--                android:text="@string/upcoming_movies"-->
-            <!--                android:textStyle="bold"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/top_rated_movies_list" />-->
+            <TextView
+                android:id="@+id/upcoming_movies_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/upcoming_movies"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/now_playing_movies_list" />
 
-            <!--            <androidx.recyclerview.widget.RecyclerView-->
-            <!--                android:id="@+id/upcoming_movies_list"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginHorizontal="16dp"-->
-            <!--                android:layout_marginTop="8dp"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/upcoming_movies_header" />-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/upcoming_movies_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:clipToPadding="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/upcoming_movies_header"
+                tools:itemCount="4"
+                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/movie_item"
+                tools:orientation="horizontal" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

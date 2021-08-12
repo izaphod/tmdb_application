@@ -2,7 +2,6 @@ package com.example.tmdbapplication.data.network
 
 import com.example.tmdbapplication.data.network.model.MovieListResponse
 import com.example.tmdbapplication.data.network.model.MovieResponse
-import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -10,24 +9,27 @@ import retrofit2.http.Query
 interface MovieApiService {
 
     @GET("movie/popular")
-    fun getMovies(
+    suspend fun getPopularMovies(
         @Query("page") page: Int
-    ): Single<MovieListResponse>
-
-    @GET("search/movie")
-    fun searchMovies(
-        @Query("query") query: String,
-        @Query("page") page: Int
-    ): Single<MovieListResponse>
+    ): MovieListResponse
 
     @GET("movie/{movie_id}")
-    fun getMovieById(
+    suspend fun getMovieById(
         @Path("movie_id") movieId: Long
-    ): Single<MovieResponse>
+    ): MovieResponse
 
     @GET("search/movie")
-    fun searchMovie(
+    suspend fun searchMovie(
         @Query("query") query: String,
         @Query("page") page: Int
-    ): Single<MovieListResponse>
+    ): MovieListResponse
+
+    @GET("discover/movie")
+    suspend fun discoverMovies(
+        @Query("primary_release_date.gte") dateFrom: String,
+        @Query("primary_release_date.lte") dateTo: String,
+        @Query("with_release_type") releaseType: String,
+        @Query("sort_by") sortBy: String,
+        @Query("page") page: Int
+    ): MovieListResponse
 }

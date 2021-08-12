@@ -1,50 +1,39 @@
 package com.example.tmdbapplication.presentation.movielist
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
-import javax.inject.Inject
-import javax.inject.Provider
-import moxy.MvpAppCompatFragment
-import moxy.ktx.moxyPresenter
 import com.example.tmdbapplication.R
-import com.example.tmdbapplication.TmdbApplication
 import com.example.tmdbapplication.databinding.FragmentMovieListBinding
-import com.example.tmdbapplication.presentation.model.MovieViewModel
-import com.example.tmdbapplication.presentation.movielist.list.MoviePagingAdapter
+import com.example.tmdbapplication.presentation.watchlist.list.MovieListAdapter
 import com.example.tmdbapplication.util.setVisibility
+import dagger.hilt.android.AndroidEntryPoint
 
-class MovieListFragment : MvpAppCompatFragment(R.layout.fragment_movie_list), MovieListView {
+@AndroidEntryPoint
+class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
 
-    @Inject
-    lateinit var presenterProvider: Provider<MovieListPresenter>
-    private val presenter: MovieListPresenter by moxyPresenter { presenterProvider.get() }
+    private val movieListViewModel: MovieListViewModel by viewModels()
 
     private var _binding: FragmentMovieListBinding? = null
     private val binding get() = _binding!!
 
-    private val movieItemAdapter = MoviePagingAdapter(
-        onMovieClick = { movie ->
-            findNavController().navigate(
-                MovieListFragmentDirections
-                    .actionMovieListFragmentToMovieDetailsFragment(movie)
-            )
-        }
-    ) { movie -> presenter.onItemWatchlistPressed(movie) }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        TmdbApplication.instance.appComponent?.injectFragment(this)
-        Log.d(TAG, "onAttach")
-    }
+    private val movieListAdapter
+        get() = MovieListAdapter(
+                onMovieClick = { movie ->
+                    findNavController().navigate(
+                        MovieListFragmentDirections
+                            .actionMovieListFragmentToMovieDetailsFragment(movie)
+                    )
+                }
+            ) { movie -> movieListViewModel.manageSelectedInWatchlist(movie) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,9 +47,9 @@ class MovieListFragment : MvpAppCompatFragment(R.layout.fragment_movie_list), Mo
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRecyclerView()
+        initViews()
         initListeners()
-        addLoadStateListener()
+        observeViewModel()
         Log.d(TAG, "onViewCreated")
     }
 
@@ -70,15 +59,24 @@ class MovieListFragment : MvpAppCompatFragment(R.layout.fragment_movie_list), Mo
         Log.d(TAG, "onDestroyView")
     }
 
-    override fun showMovies(pagingData: PagingData<MovieViewModel>) {
-        movieItemAdapter.submitData(lifecycle, pagingData)
-        Log.d(TAG, "onNewMovies")
-    }
+    private fun initViews() {
+        binding.popularMoviesList.apply {
+            layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = movieListAdapter
+        }
 
-    private fun initRecyclerView() {
-        binding.popularMoviesList.adapter = movieItemAdapter
-        binding.popularMoviesList.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.nowPlayingMoviesList.apply {
+            layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = movieListAdapter
+        }
+
+        binding.upcomingMoviesList.apply {
+            layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = movieListAdapter
+        }
     }
 
     private fun initListeners() {
@@ -101,27 +99,21 @@ class MovieListFragment : MvpAppCompatFragment(R.layout.fragment_movie_list), Mo
             }
             false
         }
-
     }
 
-    private fun addLoadStateListener() {
-        movieItemAdapter.addLoadStateListener { loadStates ->
-            if (loadStates.refresh is LoadState.Loading) {
-                binding.progress.layoutProgressBar.setVisibility(true)
-            } else {
-                binding.progress.layoutProgressBar.setVisibility(false)
-                // TODO: 7/31/21 add error state screen
-                val errorState = when {
-                    loadStates.prepend is LoadState.Error -> loadStates.prepend as LoadState.Error
-                    loadStates.append is LoadState.Error -> loadStates.append as LoadState.Error
-                    loadStates.refresh is LoadState.Error -> loadStates.refresh as LoadState.Error
-                    else -> null
-                }
-                errorState?.let {
-                    Toast.makeText(this.context, it.error.message, Toast.LENGTH_LONG).show()
-                }
+    private fun observeViewModel() {
+        movieListViewModel.movies.observe(viewLifecycleOwner, Observer { tripleList ->
+            (binding.popularMoviesList.adapter as MovieListAdapter).submitList(tripleList.first)
+            (binding.nowPlayingMoviesList.adapter as MovieListAdapter).submitList(tripleList.second)
+            (binding.upcomingMoviesList.adapter as MovieListAdapter).submitList(tripleList.third)
+        })
+
+        movieListViewModel.status.observe(viewLifecycleOwner, Observer { status ->
+            binding.movieListProgress.layoutProgressBar.setVisibility(status == Status.LOADING)
+            if (status == Status.ERROR) {
+                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
             }
-        }
+        })
     }
 
     companion object {

@@ -1,14 +1,13 @@
 package com.example.tmdbapplication.domain.usecase
 
+import androidx.annotation.WorkerThread
 import com.example.tmdbapplication.domain.repository.WatchlistDataSource
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.schedulers.Schedulers
 
 class DeleteFromWatchlistUseCase {
 
-    fun execute(watchlistDataSource: WatchlistDataSource, movieId: Long): Completable {
+    @WorkerThread
+    suspend fun execute(watchlistDataSource: WatchlistDataSource, movieId: Long) {
         return watchlistDataSource
             .delete(movieId)
-            .subscribeOn(Schedulers.io())
     }
 }

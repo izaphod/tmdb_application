@@ -3,60 +3,79 @@ package com.example.tmdbapplication.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.map
-import androidx.paging.rxjava3.observable
 import com.example.tmdbapplication.data.network.MovieApiService
 import com.example.tmdbapplication.data.network.model.asDomainModel
 import com.example.tmdbapplication.data.paging.MoviePagingSource
+import com.example.tmdbapplication.data.paging.MovieRequestType
 import com.example.tmdbapplication.data.paging.SearchPagingSource
 import com.example.tmdbapplication.domain.model.Movie
 import com.example.tmdbapplication.domain.repository.MovieDataSource
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
+import com.example.tmdbapplication.util.formatted
+import com.example.tmdbapplication.util.rollDownTwoWeeks
+import com.example.tmdbapplication.util.rollUpFourWeeks
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
+import java.util.*
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class MovieDataSourceImpl @Inject constructor(
-    private val moviePagingSource: MoviePagingSource,
-    private val movieApiService: MovieApiService,
-    private val searchPagingSource: SearchPagingSource
+    private val movieApiService: MovieApiService
 ) : MovieDataSource {
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getMoviesByPage(): Observable<PagingData<Movie>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 20,
-                enablePlaceholders = true,
-                maxSize = 30,
-                prefetchDistance = 5,
-                initialLoadSize = 40
+    private val pagingConfig = PagingConfig(
+        pageSize = 20,
+        enablePlaceholders = true,
+        maxSize = 30,
+        prefetchDistance = 5,
+        initialLoadSize = 40
+    )
+
+    override suspend fun getMovies(): Flow<Triple<List<Movie>, List<Movie>, List<Movie>>> {
+        val today = Calendar.getInstance().time
+        return combine(
+            flowOf(movieApiService.getPopularMovies(page = 1).movies.asDomainModel()),
+            flowOf(
+                movieApiService.discoverMovies(
+                    dateFrom = today.rollDownTwoWeeks().formatted(),
+                    dateTo = today.formatted(),
+                    releaseType = PREMIER_AND_THEATRICAL,
+                    sortBy = POPULARITY_DESC,
+                    page = 1
+                ).movies.asDomainModel()
             ),
-            pagingSourceFactory = { moviePagingSource }
-        )
-            .observable
-            .map { pagingData -> pagingData.map { movieResponse -> movieResponse.asDomainModel() } }
+            flowOf(
+                movieApiService.discoverMovies(
+                    dateFrom = today.formatted(),
+                    dateTo = today.rollUpFourWeeks().formatted(),
+                    releaseType = PREMIER_AND_THEATRICAL,
+                    sortBy = POPULARITY_DESC,
+                    page = 1
+                ).movies.asDomainModel()
+            )
+        ) { popular, nowPlaying, upcoming -> Triple(popular, nowPlaying, upcoming) }
     }
 
-    override fun getMovieById(movieId: Long): Single<Movie> {
-        return movieApiService.getMovieById(movieId)
-            .map { it.asDomainModel() }
+    override fun getPopularMovies(): Flow<PagingData<Movie>> {
+        return Pager(
+            config = pagingConfig,
+            pagingSourceFactory = { MoviePagingSource(movieApiService, MovieRequestType.POPULAR) }
+        ).flow
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun searchMovie(query: String): Observable<PagingData<Movie>> {
-        searchPagingSource.setQuery(query)
+    override fun searchMovie(query: String): Flow<PagingData<Movie>> {
         return Pager(
-            config = PagingConfig(
-                pageSize = 20,
-                enablePlaceholders = true,
-                maxSize = 30,
-                prefetchDistance = 5,
-                initialLoadSize = 40
-            ),
-            pagingSourceFactory = { searchPagingSource }
-        )
-            .observable
-            .map { pagingData -> pagingData.map { movieResponse -> movieResponse.asDomainModel() } }
+            config = pagingConfig,
+            pagingSourceFactory = { SearchPagingSource(movieApiService, query) }
+        ).flow
+    }
+
+    override suspend fun getMovieById(movieId: Long): Flow<Movie> {
+        return flowOf(movieApiService.getMovieById(movieId).asDomainModel())
+    }
+
+    companion object {
+        const val PREMIER_AND_THEATRICAL = "1|3"
+        const val POPULARITY_DESC = "popularity.desc"
     }
 }

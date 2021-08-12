@@ -10,7 +10,7 @@
 
     <!--Start Fragment movie list-->
     <string name="popular_movies">Popular movies</string>
-    <string name="top_rated_movies">Top rated movies</string>
+    <string name="now_playing_movies">Now playing movies</string>
     <string name="upcoming_movies">Upcoming movies</string>
     <string name="ml_toolbar_title">Home - TMDB</string>
     <string name="ml_toolbar_search">Search</string>
@@ -28,9 +28,10 @@
     <!--Start Fragment search movie-->
     <string name="sm_toolbar_title">Search movie - TMDB</string>
     <string name="edit_text_movie">Movie title</string>
-    <string name="sm_text_view_empty">Enter the title of the movie in the search box
+    <string name="sm_text_view_initial_message">Enter the title of the movie in the search box
         and click search button on keyboard</string>
     <string name="empty_query_toast">Enter movie title first</string>
+    <string name="sm_text_view_empty_result">Nothing found, change movie title and retry</string>
     <!--End Fragment search movie-->
 
     <!--Start Fragment watchlist-->

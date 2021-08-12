@@ -5,10 +5,9 @@ import com.example.tmdbapplication.domain.model.Movie
 import com.example.tmdbapplication.domain.repository.MovieDataSource
 import kotlinx.coroutines.flow.Flow
 
-class SearchMovieUseCase {
+class GetPopularMoviesUseCase {
 
-    fun execute(movieDataSource: MovieDataSource, query: String): Flow<PagingData<Movie>> {
-        return movieDataSource
-            .searchMovie(query)
+    fun execute(movieDataSource: MovieDataSource): Flow<PagingData<Movie>> {
+        return movieDataSource.getPopularMovies()
     }
 }

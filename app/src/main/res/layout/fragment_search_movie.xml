@@ -6,8 +6,8 @@
     android:layout_height="match_parent">
 
     <include
-        android:id="@+id/progress"
-        layout="@layout/layout_progressbar"
+        android:id="@+id/search_progress"
+        layout="@layout/layout_progressbar_transparent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_query"
-        tools:visibility="gone" />
+        tools:visibility="visible" />
 
     <EditText
         android:id="@+id/search_query"
@@ -33,14 +33,29 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/empty_query"
+        android:id="@+id/initial_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:paddingHorizontal="16dp"
-        android:text="@string/sm_text_view_empty"
+        android:text="@string/sm_text_view_initial_message"
         android:textSize="16sp"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_query" />
+
+    <TextView
+        android:id="@+id/empty_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="16dp"
+        android:text="@string/sm_text_view_empty_result"
+        android:textSize="16sp"
+        android:visibility="gone"
+        android:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

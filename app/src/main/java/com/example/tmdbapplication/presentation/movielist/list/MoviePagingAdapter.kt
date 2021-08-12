@@ -29,8 +29,10 @@ class MoviePagingAdapter(
         return MovieItemViewHolder(view, onMovieClick, onWatchlistMenuClick)
     }
 
+
+
     companion object {
-        private val COMPARATOR = object : DiffUtil.ItemCallback<MovieViewModel>() {
+        val COMPARATOR = object : DiffUtil.ItemCallback<MovieViewModel>() {
             override fun areItemsTheSame(
                 oldItem: MovieViewModel,
                 newItem: MovieViewModel

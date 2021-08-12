@@ -1,16 +1,12 @@
 package com.example.tmdbapplication.domain.repository
 
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
-
 interface WatchlistDataSource {
 
-    fun insert(movieId: Long): Completable
+    suspend fun insert(movieId: Long)
 
-    fun delete(movieId: Long): Completable
+    suspend fun delete(movieId: Long)
 
-    fun getWatchlist(): Observable<List<Long>>
+    suspend fun getWatchlist(): List<Long>
 
-    fun isInWatchlist(movieId: Long): Single<Boolean>
+    suspend fun isInWatchlist(movieId: Long): Boolean
 }

@@ -1,47 +1,42 @@
 package com.example.tmdbapplication.presentation.watchlist
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdbapplication.R
-import com.example.tmdbapplication.TmdbApplication
 import com.example.tmdbapplication.databinding.FragmentWatchlistBinding
-import com.example.tmdbapplication.presentation.model.MovieViewModel
-import com.example.tmdbapplication.presentation.watchlist.list.MovieItemAdapter
+import com.example.tmdbapplication.presentation.movielist.Status
+import com.example.tmdbapplication.presentation.watchlist.list.MovieListAdapter
 import com.example.tmdbapplication.util.setVisibility
-import moxy.MvpAppCompatFragment
-import moxy.ktx.moxyPresenter
-import javax.inject.Inject
-import javax.inject.Provider
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
-class WatchlistFragment : MvpAppCompatFragment(R.layout.fragment_watchlist), WatchlistView {
+@FlowPreview
+@ExperimentalCoroutinesApi
+@AndroidEntryPoint
+class WatchlistFragment : Fragment(R.layout.fragment_watchlist) {
 
-    @Inject
-    lateinit var presenterProvider: Provider<WatchlistPresenter>
-    private val presenter: WatchlistPresenter by moxyPresenter { presenterProvider.get() }
+    private val watchListViewModel: WatchlistViewModel by viewModels()
 
     private var _binding: FragmentWatchlistBinding? = null
     private val binding get() = _binding!!
 
-    private val adapter = MovieItemAdapter(
-        movieList = mutableListOf(),
+    private val movieItemAdapter = MovieListAdapter(
         onMovieClick = { movie ->
             findNavController().navigate(
                 WatchlistFragmentDirections
                     .actionWatchlistFragmentToMovieDetailsFragment(movie)
             )
         }
-    ) { movie -> presenter.onItemWatchlistPressed(movie) }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        TmdbApplication.instance.appComponent?.injectFragment(this)
-    }
+    ) { movie -> watchListViewModel.manageSelectedInWatchlist(movie) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,26 +50,25 @@ class WatchlistFragment : MvpAppCompatFragment(R.layout.fragment_watchlist), Wat
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.watchlistList.adapter = adapter
-        binding.watchlistList.layoutManager =
-            GridLayoutManager(context, 3, RecyclerView.VERTICAL, false)
+        binding.watchlistList.apply {
+            layoutManager =
+                GridLayoutManager(context, 3, RecyclerView.VERTICAL, false)
+            adapter = movieItemAdapter
+        }
+
+        watchListViewModel.movies.observe(viewLifecycleOwner, Observer {
+            movieItemAdapter.submitList(it)
+        })
+
+        watchListViewModel.status.observe(viewLifecycleOwner, Observer { status ->
+            binding.watchlistProgress.layoutProgressBar.setVisibility(status == Status.LOADING)
+            binding.emptyWatchlist.setVisibility(status == Status.ERROR || status == Status.EMPTY)
+        })
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onNewMovie(movies: List<MovieViewModel>) {
-        adapter.replaceMovies(movies)
-    }
-
-    override fun setProgressVisibility(isVisible: Boolean) {
-        binding.progress.layoutProgressBar.setVisibility(isVisible)
-    }
-
-    override fun setEmptyScreenVisibility(isVisible: Boolean) {
-        binding.emptyWatchlist.setVisibility(isVisible)
     }
 
     companion object {

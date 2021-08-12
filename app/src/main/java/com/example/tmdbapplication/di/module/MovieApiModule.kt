@@ -4,16 +4,18 @@ import com.example.tmdbapplication.data.network.MovieApiService
 import com.example.tmdbapplication.data.network.RequestInterceptor
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
+@InstallIn(SingletonComponent::class)
 @Module
-class MovieApiModule {
+object MovieApiModule {
 
     @Provides
     @Singleton
@@ -22,11 +24,10 @@ class MovieApiModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl("https://api.themoviedb.org/3/")
+    fun provideRetrofit(baseUlr: String, okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+        .baseUrl(baseUlr)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
-        .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .build()
 
     @Provides
@@ -37,8 +38,11 @@ class MovieApiModule {
         val httpClient = OkHttpClient.Builder()
         httpClient.addInterceptor(logging)
         httpClient.addNetworkInterceptor(RequestInterceptor())
-        httpClient.connectTimeout(30, TimeUnit.SECONDS)
-        httpClient.readTimeout(30, TimeUnit.SECONDS)
+        httpClient.connectTimeout(5, TimeUnit.SECONDS)
+        httpClient.readTimeout(5, TimeUnit.SECONDS)
         return httpClient.build()
     }
+
+    @Provides
+    fun provideBaseUrl(): String = "https://api.themoviedb.org/3/"
 }
