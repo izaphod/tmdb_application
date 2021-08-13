@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdbapplication.R
@@ -49,13 +51,23 @@ class WatchlistFragment : Fragment(R.layout.fragment_watchlist) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViews()
+        observeViewModel()
+    }
+
+    private fun initViews() {
+        binding.toolbar.setupWithNavController(findNavController())
+        binding.toolbar.navigationIcon = ContextCompat
+            .getDrawable(requireContext(), R.drawable.ic_arrow_back)
 
         binding.watchlistList.apply {
             layoutManager =
                 GridLayoutManager(context, 3, RecyclerView.VERTICAL, false)
             adapter = movieItemAdapter
         }
+    }
 
+    private fun observeViewModel() {
         watchListViewModel.movies.observe(viewLifecycleOwner, Observer {
             movieItemAdapter.submitList(it)
         })
