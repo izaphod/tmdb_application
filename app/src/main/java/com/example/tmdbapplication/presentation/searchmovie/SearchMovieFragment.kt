@@ -126,9 +126,4 @@ class SearchMovieFragment : Fragment(R.layout.fragment_search_movie) {
         Toast.makeText(context, getString(R.string.empty_query_toast), Toast.LENGTH_SHORT)
             .show()
     }
-
-    private fun showEmptyResultToast() {
-        Toast.makeText(context, getString(R.string.sm_text_view_empty_result), Toast.LENGTH_LONG)
-            .show()
-    }
 }

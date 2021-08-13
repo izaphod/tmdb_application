@@ -8,7 +8,11 @@ interface MovieDataSource {
 
     suspend fun getMovies(): Flow<Triple<List<Movie>, List<Movie>, List<Movie>>>
 
-    fun getPopularMovies(): Flow<PagingData<Movie>>
+    fun getPagedPopular(): Flow<PagingData<Movie>>
+
+    fun getPagedNowPlaying(): Flow<PagingData<Movie>>
+
+    fun getPagedUpcoming(): Flow<PagingData<Movie>>
 
     suspend fun getMovieById(movieId: Long): Flow<Movie>
 

@@ -22,6 +22,10 @@
         <action
             android:id="@+id/action_movie_list_fragment_to_movie_details_fragment"
             app:destination="@id/movie_details_fragment" />
+
+        <action
+            android:id="@+id/action_movie_list_fragment_to_pagedMovieFragment"
+            app:destination="@id/paged_movie_fragment" />
     </fragment>
 
     <fragment
@@ -56,4 +60,19 @@
             android:name="viewModel"
             app:argType="com.example.tmdbapplication.presentation.model.MovieViewModel" />
     </fragment>
+
+    <fragment
+        android:id="@+id/paged_movie_fragment"
+        android:name="com.example.tmdbapplication.presentation.pagedmovie.PagedMovieFragment"
+        android:label="@string/fragment_paged_movie_label"
+        tools:layout="@layout/fragment_paged_movie">
+
+        <action
+            android:id="@+id/action_pagedMovieFragment_to_movie_details_fragment"
+            app:destination="@id/movie_details_fragment" />
+        <argument
+            android:name="requestType"
+            app:argType="com.example.tmdbapplication.data.paging.MovieRequestType" />
+    </fragment>
+
 </navigation>

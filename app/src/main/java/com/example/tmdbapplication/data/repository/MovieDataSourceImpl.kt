@@ -56,10 +56,24 @@ class MovieDataSourceImpl @Inject constructor(
         ) { popular, nowPlaying, upcoming -> Triple(popular, nowPlaying, upcoming) }
     }
 
-    override fun getPopularMovies(): Flow<PagingData<Movie>> {
+    override fun getPagedPopular(): Flow<PagingData<Movie>> {
         return Pager(
             config = pagingConfig,
             pagingSourceFactory = { MoviePagingSource(movieApiService, MovieRequestType.POPULAR) }
+        ).flow
+    }
+
+    override fun getPagedNowPlaying(): Flow<PagingData<Movie>> {
+        return Pager(
+            config = pagingConfig,
+            pagingSourceFactory = { MoviePagingSource(movieApiService, MovieRequestType.NOW_PLAYING) }
+        ).flow
+    }
+
+    override fun getPagedUpcoming(): Flow<PagingData<Movie>> {
+        return Pager(
+            config = pagingConfig,
+            pagingSourceFactory = { MoviePagingSource(movieApiService, MovieRequestType.UPCOMING) }
         ).flow
     }
 

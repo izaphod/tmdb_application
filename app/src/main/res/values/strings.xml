@@ -6,6 +6,7 @@
     <string name="fragment_movie_details_label">Movie Details</string>
     <string name="fragment_search_movie_label">Search Movies</string>
     <string name="fragment_watchlist_label">Watchlist</string>
+    <string name="fragment_paged_movie_label">Watchlist</string>
     <!--End Strings used for fragments navigation-->
 
     <!--Start Fragment movie list-->
@@ -18,6 +19,7 @@
     <string name="bottom_navigation_home">Home</string>
     <string name="added_to_watchlist">%s added to watchlist</string>
     <string name="deleted_from_watchlist">%s deleted from watchlist</string>
+    <string name="all">All</string>
     <!--End Fragment movie list-->
 
     <!--Start Fragment movie details-->
@@ -40,5 +42,9 @@
         add movies to your watchlist</string>
     <string name="bottom_navigation_watchlist">Watchlist</string>
     <!--End Fragment watchlist-->
+
+    <!--Start Fragment paged movie-->
+    <string name="pm_toolbar_title">%s - TMDB</string>
+    <!--End Fragment paged movie-->
 
 </resources>

@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tmdbapplication.R
+import com.example.tmdbapplication.data.paging.MovieRequestType
 import com.example.tmdbapplication.databinding.FragmentMovieListBinding
 import com.example.tmdbapplication.presentation.watchlist.list.MovieListAdapter
 import com.example.tmdbapplication.util.setVisibility
@@ -98,6 +99,21 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
                 }
             }
             false
+        }
+
+        binding.allPopular.root.setOnClickListener {
+            findNavController().navigate(MovieListFragmentDirections
+                .actionMovieListFragmentToPagedMovieFragment(MovieRequestType.POPULAR))
+        }
+
+        binding.allNowPlaying.root.setOnClickListener {
+            findNavController().navigate(MovieListFragmentDirections
+                .actionMovieListFragmentToPagedMovieFragment(MovieRequestType.NOW_PLAYING))
+        }
+
+        binding.allUpcoming.root.setOnClickListener {
+            findNavController().navigate(MovieListFragmentDirections
+                .actionMovieListFragmentToPagedMovieFragment(MovieRequestType.UPCOMING))
         }
     }
 
