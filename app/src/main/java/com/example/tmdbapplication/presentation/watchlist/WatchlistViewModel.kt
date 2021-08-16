@@ -9,6 +9,8 @@ import com.example.tmdbapplication.domain.repository.MovieDataSource
 import com.example.tmdbapplication.domain.repository.WatchlistDataSource
 import com.example.tmdbapplication.domain.usecase.DeleteFromWatchlistUseCase
 import com.example.tmdbapplication.domain.usecase.GetMoviesFromWatchlistUseCase
+import com.example.tmdbapplication.domain.usecase.InsertToWatchlistUseCase
+import com.example.tmdbapplication.domain.usecase.IsInWatchlistUseCase
 import com.example.tmdbapplication.presentation.model.MovieViewModel
 import com.example.tmdbapplication.presentation.model.asMovieViewModel
 import com.example.tmdbapplication.presentation.model.Status
@@ -21,12 +23,9 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 @HiltViewModel
 class WatchlistViewModel @Inject constructor(
-    private val movieDataSource: MovieDataSource,
-    private val watchlistDataSource: WatchlistDataSource
+    private val getMoviesFromWatchlistUseCase: GetMoviesFromWatchlistUseCase,
+    private val deleteFromWatchlistUseCase: DeleteFromWatchlistUseCase
 ) : ViewModel() {
-
-    private val getMoviesFromWatchlistUseCase = GetMoviesFromWatchlistUseCase()
-    private val deleteFromWatchlistUseCase = DeleteFromWatchlistUseCase()
 
     private val _status = MutableLiveData<Status>()
     val status: LiveData<Status> get() = _status
@@ -57,8 +56,7 @@ class WatchlistViewModel @Inject constructor(
             try {
                 _status.value = Status.LOADING
                 val listResult = getMoviesFromWatchlistUseCase
-                    .execute(watchlistDataSource, movieDataSource)
-                    .toList()
+                    .execute()
                     .map { movie ->
                         movie.asMovieViewModel()
                             .also { movieViewModel -> movieViewModel.isInWatchlist = true }
@@ -79,7 +77,7 @@ class WatchlistViewModel @Inject constructor(
 
     private suspend fun deleteFromWatchlist(movieId: Long) {
         withContext(Dispatchers.IO) {
-            deleteFromWatchlistUseCase.execute(watchlistDataSource, movieId)
+            deleteFromWatchlistUseCase.execute(movieId)
         }
     }
 

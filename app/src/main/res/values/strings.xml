@@ -29,7 +29,7 @@
 
     <!--Start Fragment search movie-->
     <string name="sm_toolbar_title">Search movie - TMDB</string>
-    <string name="edit_text_movie">Movie title</string>
+    <string name="edit_text_movie">Movie</string>
     <string name="sm_text_view_initial_message">Enter the title of the movie in the search box
         and click search button on keyboard</string>
     <string name="empty_query_toast">Enter movie title first</string>

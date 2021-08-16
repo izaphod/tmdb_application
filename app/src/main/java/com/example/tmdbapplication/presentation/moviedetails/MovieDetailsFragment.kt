@@ -9,11 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
-import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.tmdbapplication.R
 import com.example.tmdbapplication.databinding.FragmentMovieDetailsBinding
-import com.example.tmdbapplication.presentation.movielist.list.MovieItemViewHolder
+import com.example.tmdbapplication.di.module.GlideApp
+import com.example.tmdbapplication.util.formatBackdropPath
+import com.example.tmdbapplication.util.formatPosterPath
 
 class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 
@@ -59,8 +60,8 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 
     private fun setBackdropImage() {
         var backdrop: String? = null
-        args.viewModel.movie.backdropPath?.let { backdrop = BACKDROP_FORMATTED_PATH + it }
-        Glide.with(this)
+        args.viewModel.movie.backdropPath?.let { backdrop = it.formatBackdropPath() }
+        GlideApp.with(this)
             .load(backdrop)
             .apply(
                 RequestOptions()
@@ -73,10 +74,8 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 
     private fun setPosterImage() {
         var poster: String? = null
-        args.viewModel.movie.posterPath?.let {
-            poster = MovieItemViewHolder.POSTER_FORMATTED_PATH + it
-        }
-        Glide.with(this)
+        args.viewModel.movie.posterPath?.let { poster = it.formatPosterPath() }
+        GlideApp.with(this)
             .load(poster)
             .apply(
                 RequestOptions()
@@ -85,9 +84,5 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
             )
             .centerCrop()
             .into(binding.moviePosterImage)
-    }
-
-    companion object {
-        const val BACKDROP_FORMATTED_PATH = "https://image.tmdb.org/t/p/w1280"
     }
 }

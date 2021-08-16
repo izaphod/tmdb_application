@@ -7,7 +7,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.tmdbapplication.R
 import com.example.tmdbapplication.databinding.TrendingItemBinding
 import com.example.tmdbapplication.presentation.model.MovieViewModel
-import com.example.tmdbapplication.presentation.moviedetails.MovieDetailsFragment
+import com.example.tmdbapplication.util.formatBackdropPath
 
 class TrendingItemViewHolder(
     itemView: View,
@@ -24,8 +24,8 @@ class TrendingItemViewHolder(
     fun bind(movieViewModel: MovieViewModel) {
         this.movieViewModel = movieViewModel
         val backdrop =
-            if (movieViewModel.movie.posterPath.isNullOrEmpty()) null
-            else MovieDetailsFragment.BACKDROP_FORMATTED_PATH + movieViewModel.movie.backdropPath
+            if (movieViewModel.movie.backdropPath.isNullOrEmpty()) null
+            else movieViewModel.movie.backdropPath.formatBackdropPath()
         Glide.with(itemView)
             .load(backdrop)
             .apply(

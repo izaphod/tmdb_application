@@ -7,15 +7,16 @@ import com.example.tmdbapplication.domain.repository.WatchlistDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
+import javax.inject.Inject
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class GetMoviesFromWatchlistUseCase {
+class GetMoviesFromWatchlistUseCase @Inject constructor(
+    private val watchlistDataSource: WatchlistDataSource,
+    private val movieDataSource: MovieDataSource
+) {
 
-    suspend fun execute(
-        watchlistDataSource: WatchlistDataSource,
-        movieDataSource: MovieDataSource
-    ): Flow<Movie> {
+    suspend fun execute(): List<Movie> {
         return flowOf(watchlistDataSource.getWatchlist())
             .onStart { Log.d(TAG, "getWatchlist.onStart: ") }
             .onCompletion { Log.d(TAG, "getWatchlist.onCompletion: ") }
@@ -28,6 +29,7 @@ class GetMoviesFromWatchlistUseCase {
             .onStart { Log.d(TAG, "flatMapConcat.onStart: ") }
             .onCompletion { Log.d(TAG, "flatMapConcat.onCompletion: ") }
             .onEach { Log.d(TAG, "flatMapConcat.onEach: movie = ${it.title}") }
+            .toList()
     }
 
     companion object {
