@@ -88,6 +88,6 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
     }
 
     companion object {
-        private const val BACKDROP_FORMATTED_PATH = "https://image.tmdb.org/t/p/w1280"
+        const val BACKDROP_FORMATTED_PATH = "https://image.tmdb.org/t/p/w1280"
     }
 }

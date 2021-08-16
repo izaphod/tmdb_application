@@ -56,6 +56,10 @@ class MovieDataSourceImpl @Inject constructor(
         ) { popular, nowPlaying, upcoming -> Triple(popular, nowPlaying, upcoming) }
     }
 
+    override suspend fun getTrendingMovies(): Flow<List<Movie>> {
+        return flowOf(movieApiService.getTrendingMovies().movies.asDomainModel())
+    }
+
     override fun getPagedPopular(): Flow<PagingData<Movie>> {
         return Pager(
             config = pagingConfig,

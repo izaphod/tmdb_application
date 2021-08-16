@@ -27,4 +27,11 @@ fun Movie.asMovieViewModel(): MovieViewModel {
     return MovieViewModel(movie = this)
 }
 
+fun List<MovieViewModel>.expandForViewPagerList(): MutableList<MovieViewModel> {
+    val list = this.toMutableList()
+    list.add(0, last())
+    list.add(first())
+    return list
+}
+
 
