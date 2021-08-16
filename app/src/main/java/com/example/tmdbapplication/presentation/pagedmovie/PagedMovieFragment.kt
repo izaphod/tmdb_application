@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdbapplication.R
 import com.example.tmdbapplication.data.paging.MovieRequestType
 import com.example.tmdbapplication.databinding.FragmentPagedMovieBinding
-import com.example.tmdbapplication.presentation.movielist.list.MoviePagingAdapter
+import com.example.tmdbapplication.presentation.pagedmovie.list.MoviePagingAdapter
 import com.example.tmdbapplication.util.setVisibility
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest

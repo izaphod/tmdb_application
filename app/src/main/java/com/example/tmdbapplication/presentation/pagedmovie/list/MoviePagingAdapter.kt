@@ -1,17 +1,19 @@
-package com.example.tmdbapplication.presentation.watchlist.list
+package com.example.tmdbapplication.presentation.pagedmovie.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import com.example.tmdbapplication.R
 import com.example.tmdbapplication.presentation.model.MovieViewModel
 import com.example.tmdbapplication.presentation.movielist.list.MovieItemViewHolder
-import com.example.tmdbapplication.presentation.movielist.list.MoviePagingAdapter
 
-class MovieListAdapter(
+class MoviePagingAdapter(
     private val onMovieClick: (movie: MovieViewModel) -> Unit,
     private val onWatchlistMenuClick: (movie: MovieViewModel) -> Unit
-) : ListAdapter<MovieViewModel, MovieItemViewHolder>(MoviePagingAdapter.COMPARATOR) {
+) : PagingDataAdapter<MovieViewModel, MovieItemViewHolder>(
+    COMPARATOR
+) {
 
     override fun onBindViewHolder(holder: MovieItemViewHolder, position: Int) {
         getItem(position)?.let {
@@ -26,5 +28,25 @@ class MovieListAdapter(
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.movie_item, parent, false)
         return MovieItemViewHolder(view, onMovieClick, onWatchlistMenuClick)
+    }
+
+
+
+    companion object {
+        val COMPARATOR = object : DiffUtil.ItemCallback<MovieViewModel>() {
+            override fun areItemsTheSame(
+                oldItem: MovieViewModel,
+                newItem: MovieViewModel
+            ): Boolean {
+                return oldItem.movie.movieId == newItem.movie.movieId
+            }
+
+            override fun areContentsTheSame(
+                oldItem: MovieViewModel,
+                newItem: MovieViewModel
+            ): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 }

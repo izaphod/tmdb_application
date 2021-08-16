@@ -10,19 +10,14 @@ import com.example.tmdbapplication.domain.usecase.DeleteFromWatchlistUseCase
 import com.example.tmdbapplication.domain.usecase.InsertToWatchlistUseCase
 import com.example.tmdbapplication.domain.usecase.IsInWatchlistUseCase
 import com.example.tmdbapplication.presentation.model.MovieViewModel
+import com.example.tmdbapplication.presentation.model.Status
 import com.example.tmdbapplication.presentation.model.asMovieViewModels
+import com.example.tmdbapplication.presentation.model.expandForViewPagerList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
-
-enum class Status {
-    LOADING,
-    ERROR,
-    DONE,
-    EMPTY
-}
 
 @HiltViewModel
 class MovieListViewModel @Inject constructor(
@@ -39,6 +34,9 @@ class MovieListViewModel @Inject constructor(
     val movies: LiveData<Triple<List<MovieViewModel>, List<MovieViewModel>, List<MovieViewModel>>>
         get() = _movies
 
+    private var _trendingMovies = MutableLiveData<List<MovieViewModel>>()
+    val trendingMovies: LiveData<List<MovieViewModel>> get() = _trendingMovies
+
     private val _status = MutableLiveData<Status>()
     val status: LiveData<Status> get() = _status
 
@@ -46,7 +44,17 @@ class MovieListViewModel @Inject constructor(
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     init {
+        loadTrendingMovies()
         loadMovies()
+    }
+
+    private fun loadTrendingMovies() {
+        coroutineScope.launch {
+            movieDataSource.getTrendingMovies()
+                .map { it.asMovieViewModels() }
+                .map { it.expandForViewPagerList() }
+                .collectLatest { _trendingMovies.value = it }
+        }
     }
 
     fun manageSelectedInWatchlist(movie: MovieViewModel) {

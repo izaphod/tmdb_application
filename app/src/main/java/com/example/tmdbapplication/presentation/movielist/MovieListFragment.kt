@@ -14,7 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tmdbapplication.R
 import com.example.tmdbapplication.data.paging.MovieRequestType
 import com.example.tmdbapplication.databinding.FragmentMovieListBinding
-import com.example.tmdbapplication.presentation.watchlist.list.MovieListAdapter
+import com.example.tmdbapplication.presentation.model.Status
+import com.example.tmdbapplication.presentation.movielist.list.AdapterType
+import com.example.tmdbapplication.presentation.movielist.list.MovieListAdapter
+import com.example.tmdbapplication.presentation.movielist.pager.TrendingItemDecoration
+import com.example.tmdbapplication.presentation.movielist.pager.TrendingOnPageChangeCallback
+import com.example.tmdbapplication.presentation.movielist.pager.TrendingPageTransformer
 import com.example.tmdbapplication.util.setVisibility
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,13 +33,16 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
 
     private val movieListAdapter
         get() = MovieListAdapter(
-                onMovieClick = { movie ->
-                    findNavController().navigate(
-                        MovieListFragmentDirections
-                            .actionMovieListFragmentToMovieDetailsFragment(movie)
-                    )
-                }
-            ) { movie -> movieListViewModel.manageSelectedInWatchlist(movie) }
+            AdapterType.COMMON,
+            onMovieClick = { movie ->
+                findNavController().navigate(
+                    MovieListFragmentDirections
+                        .actionMovieListFragmentToMovieDetailsFragment(movie)
+                )
+            }
+        ) { movie -> movieListViewModel.manageSelectedInWatchlist(movie) }
+
+    private lateinit var trendingMovieAdapter: MovieListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,6 +57,7 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        initTrendingAdapter()
         initListeners()
         observeViewModel()
         Log.d(TAG, "onViewCreated")
@@ -80,6 +89,17 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
         }
     }
 
+    private fun initTrendingAdapter() {
+        trendingMovieAdapter = MovieListAdapter(
+            AdapterType.TRENDING,
+            onMovieClick = { movie ->
+                findNavController().navigate(
+                    MovieListFragmentDirections
+                        .actionMovieListFragmentToMovieDetailsFragment(movie))
+            }
+        ) { _ -> }
+    }
+
     private fun initListeners() {
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -102,18 +122,24 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
         }
 
         binding.allPopular.root.setOnClickListener {
-            findNavController().navigate(MovieListFragmentDirections
-                .actionMovieListFragmentToPagedMovieFragment(MovieRequestType.POPULAR))
+            findNavController().navigate(
+                MovieListFragmentDirections
+                    .actionMovieListFragmentToPagedMovieFragment(MovieRequestType.POPULAR)
+            )
         }
 
         binding.allNowPlaying.root.setOnClickListener {
-            findNavController().navigate(MovieListFragmentDirections
-                .actionMovieListFragmentToPagedMovieFragment(MovieRequestType.NOW_PLAYING))
+            findNavController().navigate(
+                MovieListFragmentDirections
+                    .actionMovieListFragmentToPagedMovieFragment(MovieRequestType.NOW_PLAYING)
+            )
         }
 
         binding.allUpcoming.root.setOnClickListener {
-            findNavController().navigate(MovieListFragmentDirections
-                .actionMovieListFragmentToPagedMovieFragment(MovieRequestType.UPCOMING))
+            findNavController().navigate(
+                MovieListFragmentDirections
+                    .actionMovieListFragmentToPagedMovieFragment(MovieRequestType.UPCOMING)
+            )
         }
     }
 
@@ -128,6 +154,20 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
             binding.movieListProgress.layoutProgressBar.setVisibility(status == Status.LOADING)
             if (status == Status.ERROR) {
                 Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        movieListViewModel.trendingMovies.observe(viewLifecycleOwner, Observer { list ->
+            trendingMovieAdapter.submitList(list)
+            binding.trendingMoviesPager.apply {
+                offscreenPageLimit = 1
+                setPageTransformer(TrendingPageTransformer())
+                addItemDecoration(TrendingItemDecoration())
+                registerOnPageChangeCallback(
+                    TrendingOnPageChangeCallback(this, list)
+                )
+                adapter = trendingMovieAdapter
+                setCurrentItem(1, false)
             }
         })
     }

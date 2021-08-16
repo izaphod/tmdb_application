@@ -14,8 +14,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdbapplication.R
 import com.example.tmdbapplication.databinding.FragmentWatchlistBinding
-import com.example.tmdbapplication.presentation.movielist.Status
-import com.example.tmdbapplication.presentation.watchlist.list.MovieListAdapter
+import com.example.tmdbapplication.presentation.model.Status
+import com.example.tmdbapplication.presentation.movielist.list.AdapterType
+import com.example.tmdbapplication.presentation.movielist.list.MovieListAdapter
 import com.example.tmdbapplication.util.setVisibility
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,6 +33,7 @@ class WatchlistFragment : Fragment(R.layout.fragment_watchlist) {
     private val binding get() = _binding!!
 
     private val movieItemAdapter = MovieListAdapter(
+        AdapterType.COMMON,
         onMovieClick = { movie ->
             findNavController().navigate(
                 WatchlistFragmentDirections

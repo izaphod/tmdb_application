@@ -32,4 +32,7 @@ interface MovieApiService {
         @Query("sort_by") sortBy: String,
         @Query("page") page: Int
     ): MovieListResponse
+
+    @GET("trending/movie/week")
+    suspend fun getTrendingMovies(): MovieListResponse
 }

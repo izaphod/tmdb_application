@@ -11,7 +11,7 @@ import com.example.tmdbapplication.domain.usecase.DeleteFromWatchlistUseCase
 import com.example.tmdbapplication.domain.usecase.GetMoviesFromWatchlistUseCase
 import com.example.tmdbapplication.presentation.model.MovieViewModel
 import com.example.tmdbapplication.presentation.model.asMovieViewModel
-import com.example.tmdbapplication.presentation.movielist.Status
+import com.example.tmdbapplication.presentation.model.Status
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.toList
