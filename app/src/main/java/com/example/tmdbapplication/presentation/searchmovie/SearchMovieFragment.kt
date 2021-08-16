@@ -116,10 +116,6 @@ class SearchMovieFragment : Fragment(R.layout.fragment_search_movie) {
                 searchMovieViewModel.showEmptyQueryComplete()
             }
         })
-
-        searchMovieViewModel.showEmptyResult.observe(viewLifecycleOwner, Observer { isVisible ->
-            binding.emptyResult.setVisibility(isVisible)
-        })
     }
 
     private fun showEmptyQueryToast() {

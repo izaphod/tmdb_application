@@ -1,17 +1,19 @@
 package com.example.tmdbapplication.domain.usecase
 
-import androidx.paging.PagingData
 import com.example.tmdbapplication.domain.model.Movie
 import com.example.tmdbapplication.domain.repository.MovieDataSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class SearchMovieUseCase @Inject constructor(
+class GetMoviesUseCase @Inject constructor(
     private val movieDataSource: MovieDataSource
 ) {
 
-    fun execute(query: String): Flow<PagingData<Movie>> {
-        return movieDataSource
-            .searchMovie(query)
+    suspend fun executeTrending(): Flow<List<Movie>> {
+        return movieDataSource.getTrendingMovies()
+    }
+
+    suspend fun executeTriple(): Flow<Triple<List<Movie>, List<Movie>, List<Movie>>> {
+        return movieDataSource.getMovies()
     }
 }

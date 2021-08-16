@@ -4,9 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tmdbapplication.domain.repository.MovieDataSource
-import com.example.tmdbapplication.domain.repository.WatchlistDataSource
 import com.example.tmdbapplication.domain.usecase.DeleteFromWatchlistUseCase
+import com.example.tmdbapplication.domain.usecase.GetMoviesUseCase
 import com.example.tmdbapplication.domain.usecase.InsertToWatchlistUseCase
 import com.example.tmdbapplication.domain.usecase.IsInWatchlistUseCase
 import com.example.tmdbapplication.presentation.model.MovieViewModel
@@ -21,13 +20,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieListViewModel @Inject constructor(
-    private val movieDataSource: MovieDataSource,
-    private val watchlistDataSource: WatchlistDataSource
+    private val getMoviesUseCase: GetMoviesUseCase,
+    private val isInWatchlistUseCase: IsInWatchlistUseCase,
+    private val insertToWatchlistUseCase: InsertToWatchlistUseCase,
+    private val deleteFromWatchlistUseCase: DeleteFromWatchlistUseCase
 ) : ViewModel() {
-
-    private val isInWatchlistUseCase = IsInWatchlistUseCase()
-    private val insertToWatchlistUseCase = InsertToWatchlistUseCase()
-    private val deleteFromWatchlistUseCase = DeleteFromWatchlistUseCase()
 
     private var _movies =
         MutableLiveData<Triple<List<MovieViewModel>, List<MovieViewModel>, List<MovieViewModel>>>()
@@ -48,15 +45,6 @@ class MovieListViewModel @Inject constructor(
         loadMovies()
     }
 
-    private fun loadTrendingMovies() {
-        coroutineScope.launch {
-            movieDataSource.getTrendingMovies()
-                .map { it.asMovieViewModels() }
-                .map { it.expandForViewPagerList() }
-                .collectLatest { _trendingMovies.value = it }
-        }
-    }
-
     fun manageSelectedInWatchlist(movie: MovieViewModel) {
         viewModelScope.launch {
             if (movie.isInWatchlist) {
@@ -71,12 +59,9 @@ class MovieListViewModel @Inject constructor(
         coroutineScope.launch {
             try {
                 _status.value = Status.LOADING
-                movieDataSource.getMovies()
+                getMoviesUseCase.executeTriple()
                     .map { tripleMovies ->
-                        tripleMovies.asMovieViewModels()
-                            .also { tripleMovieViewModels ->
-                            checkInWatchlist(tripleMovieViewModels)
-                        }
+                        tripleMovies.asMovieViewModels(isInWatchlistUseCase)
                     }
                     .collectLatest { resultTripleList ->
                         if (resultTripleList.first.isNotEmpty() &&
@@ -97,36 +82,24 @@ class MovieListViewModel @Inject constructor(
         }
     }
 
+    private fun loadTrendingMovies() {
+        coroutineScope.launch {
+            getMoviesUseCase.executeTrending()
+                .map { it.asMovieViewModels() }
+                .map { it.expandForViewPagerList() }
+                .collectLatest { _trendingMovies.value = it }
+        }
+    }
+
     private suspend fun insertToWatchlist(movieId: Long) {
         withContext(Dispatchers.IO) {
-            insertToWatchlistUseCase.execute(watchlistDataSource, movieId)
+            insertToWatchlistUseCase.execute(movieId)
         }
     }
 
     private suspend fun deleteFromWatchlist(movieId: Long) {
         withContext(Dispatchers.IO) {
-            deleteFromWatchlistUseCase.execute(watchlistDataSource, movieId)
-        }
-    }
-
-    private suspend fun checkInWatchlist(
-        tripleList: Triple<List<MovieViewModel>, List<MovieViewModel>, List<MovieViewModel>>
-    ): Triple<List<MovieViewModel>, List<MovieViewModel>, List<MovieViewModel>> {
-        return tripleList.apply {
-            withContext(Dispatchers.IO) {
-                first.forEach { movieViewModel ->
-                    movieViewModel.isInWatchlist = isInWatchlistUseCase
-                        .execute(watchlistDataSource, movieViewModel.movie.movieId)
-                }
-                second.forEach { movieViewModel ->
-                    movieViewModel.isInWatchlist = isInWatchlistUseCase
-                        .execute(watchlistDataSource, movieViewModel.movie.movieId)
-                }
-                third.forEach { movieViewModel ->
-                    movieViewModel.isInWatchlist = isInWatchlistUseCase
-                        .execute(watchlistDataSource, movieViewModel.movie.movieId)
-                }
-            }
+            deleteFromWatchlistUseCase.execute(movieId)
         }
     }
 

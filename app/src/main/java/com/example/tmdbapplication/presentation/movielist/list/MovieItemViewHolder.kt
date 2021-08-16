@@ -5,11 +5,12 @@ import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.tmdbapplication.R
 import com.example.tmdbapplication.databinding.MovieItemBinding
+import com.example.tmdbapplication.di.module.GlideApp
 import com.example.tmdbapplication.presentation.model.MovieViewModel
+import com.example.tmdbapplication.util.formatPosterPath
 
 class MovieItemViewHolder(
     itemView: View,
@@ -28,8 +29,8 @@ class MovieItemViewHolder(
         this.movieViewModel = movieViewModel
         val posterPath =
             if (movieViewModel.movie.posterPath.isNullOrEmpty()) null
-            else POSTER_FORMATTED_PATH + movieViewModel.movie.posterPath
-        Glide.with(itemView)
+            else movieViewModel.movie.posterPath.formatPosterPath()
+        GlideApp.with(itemView)
             .load(posterPath)
             .apply(
                 RequestOptions()
@@ -84,9 +85,5 @@ class MovieItemViewHolder(
             popup.setForceShowIcon(true)
         }
         popup.show()
-    }
-
-    companion object {
-        const val POSTER_FORMATTED_PATH = "https://image.tmdb.org/t/p/w342"
     }
 }
