@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/movie_list_fragment">
+
+    <fragment
+        android:id="@+id/movie_list_fragment"
+        android:name="com.example.tmdbapplication.presentation.movielist.MovieListFragment"
+        android:label="@string/fragment_movie_list_label"
+        tools:layout="@layout/fragment_movie_list">
+
+        <action
+            android:id="@+id/action_movie_list_fragment_to_watchlist_fragment"
+            app:destination="@id/watchlist_fragment" />
+
+        <action
+            android:id="@+id/action_movie_list_fragment_to_search_movie_fragment"
+            app:destination="@id/search_movie_fragment" />
+
+        <action
+            android:id="@+id/action_movie_list_fragment_to_movie_details_fragment"
+            app:destination="@id/movie_details_fragment" />
+
+        <action
+            android:id="@+id/action_movie_list_fragment_to_pagedMovieFragment"
+            app:destination="@id/paged_movie_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/watchlist_fragment"
+        android:name="com.example.tmdbapplication.presentation.watchlist.WatchlistFragment"
+        android:label="@string/fragment_watchlist_label"
+        tools:layout="@layout/fragment_watchlist">
+
+        <action
+            android:id="@+id/action_watchlist_fragment_to_movie_details_fragment"
+            app:destination="@id/movie_details_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/search_movie_fragment"
+        android:name="com.example.tmdbapplication.presentation.searchmovie.SearchMovieFragment"
+        android:label="@string/fragment_search_movie_label"
+        tools:layout="@layout/fragment_search_movie">
+
+        <action
+            android:id="@+id/action_search_movie_fragment_to_movie_details_fragment"
+            app:destination="@id/movie_details_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/movie_details_fragment"
+        android:name="com.example.tmdbapplication.presentation.moviedetails.MovieDetailsFragment"
+        android:label="@string/fragment_movie_details_label"
+        tools:layout="@layout/fragment_movie_details">
+
+        <argument
+            android:name="viewModel"
+            app:argType="com.example.tmdbapplication.presentation.model.MovieViewModel" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/paged_movie_fragment"
+        android:name="com.example.tmdbapplication.presentation.pagedmovie.PagedMovieFragment"
+        android:label="@string/fragment_paged_movie_label"
+        tools:layout="@layout/fragment_paged_movie">
+
+        <action
+            android:id="@+id/action_pagedMovieFragment_to_movie_details_fragment"
+            app:destination="@id/movie_details_fragment" />
+        <argument
+            android:name="requestType"
+            app:argType="com.example.tmdbapplication.data.paging.MovieRequestType" />
+    </fragment>
+
+</navigation>

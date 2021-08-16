@@ -1,3 +1,50 @@
 <resources>
     <string name="app_name">TMDB Appllication</string>
+
+    <!--Start Strings used for fragments navigation-->
+    <string name="fragment_movie_list_label">Movies</string>
+    <string name="fragment_movie_details_label">Movie Details</string>
+    <string name="fragment_search_movie_label">Search Movies</string>
+    <string name="fragment_watchlist_label">Watchlist</string>
+    <string name="fragment_paged_movie_label">Watchlist</string>
+    <!--End Strings used for fragments navigation-->
+
+    <!--Start Fragment movie list-->
+    <string name="popular_movies">Popular movies</string>
+    <string name="now_playing_movies">Now playing movies</string>
+    <string name="upcoming_movies">Upcoming movies</string>
+    <string name="ml_toolbar_title">Home - TMDB</string>
+    <string name="ml_toolbar_search">Search</string>
+    <string name="popup_menu_watchlist">Watchlist</string>
+    <string name="bottom_navigation_home">Home</string>
+    <string name="added_to_watchlist">%s added to watchlist</string>
+    <string name="deleted_from_watchlist">%s deleted from watchlist</string>
+    <string name="all">All</string>
+    <!--End Fragment movie list-->
+
+    <!--Start Fragment movie details-->
+    <string name="overview">Overview</string>
+    <string name="user_score">User Score</string>
+    <!--End Fragment movie details-->
+
+    <!--Start Fragment search movie-->
+    <string name="sm_toolbar_title">Search movie - TMDB</string>
+    <string name="edit_text_movie">Movie title</string>
+    <string name="sm_text_view_initial_message">Enter the title of the movie in the search box
+        and click search button on keyboard</string>
+    <string name="empty_query_toast">Enter movie title first</string>
+    <string name="sm_text_view_empty_result">Nothing found, change movie title and retry</string>
+    <!--End Fragment search movie-->
+
+    <!--Start Fragment watchlist-->
+    <string name="wl_toolbar_title">My Watchlist - TMDB</string>
+    <string name="wl_text_view_empty">There is nothing here yet,
+        add movies to your watchlist</string>
+    <string name="bottom_navigation_watchlist">Watchlist</string>
+    <!--End Fragment watchlist-->
+
+    <!--Start Fragment paged movie-->
+    <string name="pm_toolbar_title">%s - TMDB</string>
+    <!--End Fragment paged movie-->
+
 </resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/watchlist"
+        android:icon="@drawable/ic_round_watchlist_false_24"
+        android:title="@string/popup_menu_watchlist" />
+</menu>
