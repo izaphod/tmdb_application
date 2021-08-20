@@ -5,18 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/menu_fragment_movie_lists"
-        app:title="@string/ml_toolbar_title"
-        app:titleTextColor="?attr/colorOnPrimary" />
-
     <include
         android:id="@+id/movie_list_progress"
         layout="@layout/layout_progressbar"
@@ -24,7 +12,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="gone" />
 
     <ScrollView
@@ -35,7 +23,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -59,8 +47,8 @@
                 android:layout_marginTop="8dp"
                 android:padding="4dp"
                 android:text="@string/popular_movies"
-                android:textColor="@color/white"
-                android:textStyle="bold"
+                android:textAppearance="@style/CustomHeadline6"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/trending_movies_pager" />
 
@@ -95,8 +83,8 @@
                 android:layout_marginTop="8dp"
                 android:padding="4dp"
                 android:text="@string/now_playing_movies"
-                android:textColor="@color/white"
-                android:textStyle="bold"
+                android:textAppearance="@style/CustomHeadline6"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/popular_movies_list" />
 
@@ -131,8 +119,8 @@
                 android:layout_marginTop="8dp"
                 android:padding="4dp"
                 android:text="@string/upcoming_movies"
-                android:textColor="@color/white"
-                android:textStyle="bold"
+                android:textAppearance="@style/CustomHeadline6"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/now_playing_movies_list" />
 

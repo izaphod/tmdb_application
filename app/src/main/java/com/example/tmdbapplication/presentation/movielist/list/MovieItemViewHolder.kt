@@ -52,8 +52,8 @@ class MovieItemViewHolder(
         val popup = PopupMenu(itemView.context, view)
         popup.menuInflater.inflate(R.menu.menu_movie_item_popup, popup.menu)
         popup.menu.findItem(R.id.watchlist).setIcon(
-            if (movieViewModel.isInWatchlist) R.drawable.ic_round_watchlist_true_24
-            else R.drawable.ic_round_watchlist_false_24
+            if (movieViewModel.isInWatchlist) R.drawable.ic_watchlist_true
+            else R.drawable.ic_watchlist_false
         )
         popup.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -65,14 +65,14 @@ class MovieItemViewHolder(
                             R.string.deleted_from_watchlist,
                             movieViewModel.movie.title
                         )
-                        it.setIcon(R.drawable.ic_round_watchlist_false_24)
+                        it.setIcon(R.drawable.ic_watchlist_false)
                         movieViewModel.isInWatchlist = false
                     } else {
                         text = itemView.resources.getString(
                             R.string.added_to_watchlist,
                             movieViewModel.movie.title
                         )
-                        it.setIcon(R.drawable.ic_round_watchlist_true_24)
+                        it.setIcon(R.drawable.ic_watchlist_true)
                         movieViewModel.isInWatchlist = true
                     }
                     Toast.makeText(itemView.context, text, Toast.LENGTH_SHORT).show()

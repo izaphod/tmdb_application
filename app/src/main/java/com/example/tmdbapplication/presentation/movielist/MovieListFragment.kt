@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tmdbapplication.R
@@ -36,8 +35,7 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
             AdapterType.COMMON,
             onMovieClick = { movie ->
                 findNavController().navigate(
-                    MovieListFragmentDirections
-                        .actionMovieListFragmentToMovieDetailsFragment(movie)
+                    MovieListFragmentDirections.actionHomeToDetails(movie)
                 )
             }
         ) { movie -> movieListViewModel.manageSelectedInWatchlist(movie) }
@@ -94,70 +92,50 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
             AdapterType.TRENDING,
             onMovieClick = { movie ->
                 findNavController().navigate(
-                    MovieListFragmentDirections
-                        .actionMovieListFragmentToMovieDetailsFragment(movie))
+                    MovieListFragmentDirections.actionHomeToDetails(movie))
             }
-        ) { _ -> }
+        ) { }
     }
 
     private fun initListeners() {
-        binding.toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.watchlist -> {
-                    findNavController()
-                        .navigate(
-                            MovieListFragmentDirections
-                                .actionMovieListFragmentToWatchlistFragment()
-                        )
-                    return@setOnMenuItemClickListener true
-                }
-                R.id.search -> {
-                    findNavController().navigate(
-                        MovieListFragmentDirections
-                            .actionMovieListFragmentToSearchMovieFragment()
-                    )
-                }
-            }
-            false
-        }
-
         binding.allPopular.root.setOnClickListener {
             findNavController().navigate(
                 MovieListFragmentDirections
-                    .actionMovieListFragmentToPagedMovieFragment(MovieRequestType.POPULAR)
+                    .actionHomeToPagedList(MovieRequestType.POPULAR)
             )
         }
 
         binding.allNowPlaying.root.setOnClickListener {
             findNavController().navigate(
                 MovieListFragmentDirections
-                    .actionMovieListFragmentToPagedMovieFragment(MovieRequestType.NOW_PLAYING)
+                    .actionHomeToPagedList(MovieRequestType.NOW_PLAYING)
             )
         }
 
         binding.allUpcoming.root.setOnClickListener {
             findNavController().navigate(
                 MovieListFragmentDirections
-                    .actionMovieListFragmentToPagedMovieFragment(MovieRequestType.UPCOMING)
+                    .actionHomeToPagedList(MovieRequestType.UPCOMING)
             )
         }
     }
 
     private fun observeViewModel() {
-        movieListViewModel.movies.observe(viewLifecycleOwner, Observer { tripleList ->
+        movieListViewModel.movies.observe(viewLifecycleOwner) { tripleList ->
             (binding.popularMoviesList.adapter as MovieListAdapter).submitList(tripleList.first)
             (binding.nowPlayingMoviesList.adapter as MovieListAdapter).submitList(tripleList.second)
             (binding.upcomingMoviesList.adapter as MovieListAdapter).submitList(tripleList.third)
-        })
+        }
 
-        movieListViewModel.status.observe(viewLifecycleOwner, Observer { status ->
+        movieListViewModel.status.observe(viewLifecycleOwner) { status ->
             binding.movieListProgress.layoutProgressBar.setVisibility(status == Status.LOADING)
             if (status == Status.ERROR) {
                 Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
             }
-        })
+        }
 
-        movieListViewModel.trendingMovies.observe(viewLifecycleOwner, Observer { list ->
+        // TODO: 8/18/21 ItemDecoration in landscape mode
+        movieListViewModel.trendingMovies.observe(viewLifecycleOwner) { list ->
             trendingMovieAdapter.submitList(list)
             binding.trendingMoviesPager.apply {
                 offscreenPageLimit = 1
@@ -169,7 +147,7 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
                 adapter = trendingMovieAdapter
                 setCurrentItem(1, false)
             }
-        })
+        }
     }
 
     companion object {

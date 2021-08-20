@@ -7,5 +7,5 @@
     android:focusable="true"
     android:padding="4dp"
     android:text="@string/all"
-    android:textColor="@color/white"
-    android:textStyle="bold" />
+    android:textAppearance="@style/CustomHeadline6"
+    android:textSize="16sp" />

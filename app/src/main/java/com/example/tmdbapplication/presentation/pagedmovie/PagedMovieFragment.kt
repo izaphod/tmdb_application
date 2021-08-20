@@ -4,20 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.setupWithNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdbapplication.R
 import com.example.tmdbapplication.data.paging.MovieRequestType
 import com.example.tmdbapplication.databinding.FragmentPagedMovieBinding
+import com.example.tmdbapplication.presentation.MainActivity
 import com.example.tmdbapplication.presentation.pagedmovie.list.MoviePagingAdapter
 import com.example.tmdbapplication.util.setVisibility
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,8 +35,7 @@ class PagedMovieFragment : Fragment(R.layout.fragment_paged_movie) {
     private val pagedMovieAdapter = MoviePagingAdapter(
         onMovieClick = { movie ->
             findNavController().navigate(
-                PagedMovieFragmentDirections
-                    .actionPagedMovieFragmentToMovieDetailsFragment(movie)
+                PagedMovieFragmentDirections.actionPagedListToDetails(movie)
             )
         }
     ) { movie -> pagedMovieViewModel.manageSelectedInWatchlist(movie) }
@@ -61,22 +58,19 @@ class PagedMovieFragment : Fragment(R.layout.fragment_paged_movie) {
     }
 
     private fun initViews(requestType: MovieRequestType) {
-
-        binding.toolbar.setupWithNavController(findNavController())
-        binding.toolbar.navigationIcon = ContextCompat
-            .getDrawable(requireContext(), R.drawable.ic_arrow_back)
-
+        val toolbar = (activity as MainActivity).supportActionBar
         when (requestType) {
             MovieRequestType.POPULAR -> {
-                binding.toolbar.title = getString(R.string.pm_toolbar_title, POPULAR)
+                toolbar?.title = getString(R.string.fragment_paged_movie_label, POPULAR)
             }
             MovieRequestType.NOW_PLAYING -> {
-                binding.toolbar.title = getString(R.string.pm_toolbar_title, NOW_PLAYING)
+                toolbar?.title = getString(R.string.fragment_paged_movie_label, NOW_PLAYING)
             }
             MovieRequestType.UPCOMING -> {
-                binding.toolbar.title = getString(R.string.pm_toolbar_title, UPCOMING)
+                toolbar?.title = getString(R.string.fragment_paged_movie_label, UPCOMING)
             }
         }
+
         binding.moviePagedList.apply {
             layoutManager =
                 GridLayoutManager(context, 3, RecyclerView.VERTICAL, false)
@@ -85,9 +79,9 @@ class PagedMovieFragment : Fragment(R.layout.fragment_paged_movie) {
     }
 
     private fun observeViewModel() {
-        pagedMovieViewModel.movies.observe(viewLifecycleOwner, Observer { pagingData ->
+        pagedMovieViewModel.movies.observe(viewLifecycleOwner) { pagingData ->
             pagedMovieAdapter.submitData(lifecycle, pagingData)
-        })
+        }
     }
 
     private fun observeLoadStateFLow() {
@@ -102,8 +96,8 @@ class PagedMovieFragment : Fragment(R.layout.fragment_paged_movie) {
     }
 
     companion object {
-        private const val POPULAR = "Popular movies"
-        private const val NOW_PLAYING = "Now playing movies"
-        private const val UPCOMING = "Upcoming movies"
+        private const val POPULAR = "Popular"
+        private const val NOW_PLAYING = "Now playing"
+        private const val UPCOMING = "Upcoming"
     }
 }

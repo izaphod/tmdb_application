@@ -16,7 +16,7 @@ interface MovieDataSource {
 
     fun getPagedUpcoming(): Flow<PagingData<Movie>>
 
-    suspend fun getMovieById(movieId: Long): Flow<Movie>
+    suspend fun getMovieById(movieId: Long): Movie
 
     fun searchMovie(query: String): Flow<PagingData<Movie>>
 }

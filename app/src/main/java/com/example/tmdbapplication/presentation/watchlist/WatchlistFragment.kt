@@ -4,12 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdbapplication.R
@@ -36,8 +33,7 @@ class WatchlistFragment : Fragment(R.layout.fragment_watchlist) {
         AdapterType.COMMON,
         onMovieClick = { movie ->
             findNavController().navigate(
-                WatchlistFragmentDirections
-                    .actionWatchlistFragmentToMovieDetailsFragment(movie)
+                WatchlistFragmentDirections.actionWatchlistToDetails(movie)
             )
         }
     ) { movie -> watchListViewModel.manageSelectedInWatchlist(movie) }
@@ -58,10 +54,6 @@ class WatchlistFragment : Fragment(R.layout.fragment_watchlist) {
     }
 
     private fun initViews() {
-        binding.toolbar.setupWithNavController(findNavController())
-        binding.toolbar.navigationIcon = ContextCompat
-            .getDrawable(requireContext(), R.drawable.ic_arrow_back)
-
         binding.watchlistList.apply {
             layoutManager =
                 GridLayoutManager(context, 3, RecyclerView.VERTICAL, false)
@@ -70,22 +62,15 @@ class WatchlistFragment : Fragment(R.layout.fragment_watchlist) {
     }
 
     private fun observeViewModel() {
-        watchListViewModel.movies.observe(viewLifecycleOwner, Observer {
-            movieItemAdapter.submitList(it)
-        })
-
-        watchListViewModel.status.observe(viewLifecycleOwner, Observer { status ->
+        watchListViewModel.movies.observe(viewLifecycleOwner) { movieItemAdapter.submitList(it) }
+        watchListViewModel.status.observe(viewLifecycleOwner) { status ->
             binding.watchlistProgress.layoutProgressBar.setVisibility(status == Status.LOADING)
             binding.emptyWatchlist.setVisibility(status == Status.ERROR || status == Status.EMPTY)
-        })
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        private const val TAG = "WatchlistFragment"
     }
 }

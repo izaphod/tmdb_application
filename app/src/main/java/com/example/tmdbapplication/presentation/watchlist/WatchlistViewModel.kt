@@ -5,18 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tmdbapplication.domain.repository.MovieDataSource
-import com.example.tmdbapplication.domain.repository.WatchlistDataSource
 import com.example.tmdbapplication.domain.usecase.DeleteFromWatchlistUseCase
+import com.example.tmdbapplication.domain.usecase.GetMovieByIdUseCase
 import com.example.tmdbapplication.domain.usecase.GetMoviesFromWatchlistUseCase
-import com.example.tmdbapplication.domain.usecase.InsertToWatchlistUseCase
-import com.example.tmdbapplication.domain.usecase.IsInWatchlistUseCase
 import com.example.tmdbapplication.presentation.model.MovieViewModel
-import com.example.tmdbapplication.presentation.model.asMovieViewModel
 import com.example.tmdbapplication.presentation.model.Status
+import com.example.tmdbapplication.presentation.model.asMovieViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 @FlowPreview
@@ -24,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class WatchlistViewModel @Inject constructor(
     private val getMoviesFromWatchlistUseCase: GetMoviesFromWatchlistUseCase,
-    private val deleteFromWatchlistUseCase: DeleteFromWatchlistUseCase
+    private val deleteFromWatchlistUseCase: DeleteFromWatchlistUseCase,
+    private val getMovieByIdUseCase: GetMovieByIdUseCase
 ) : ViewModel() {
 
     private val _status = MutableLiveData<Status>()
@@ -44,7 +42,6 @@ class WatchlistViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 deleteFromWatchlist(movie.movie.movieId)
-                loadMoviesFromWatchlist()
             } catch (t: Throwable) {
                 Log.e(TAG, "manageSelectedInWatchlist: ", t)
             }
@@ -55,19 +52,24 @@ class WatchlistViewModel @Inject constructor(
         coroutineScope.launch {
             try {
                 _status.value = Status.LOADING
-                val listResult = getMoviesFromWatchlistUseCase
+                getMoviesFromWatchlistUseCase
                     .execute()
-                    .map { movie ->
-                        movie.asMovieViewModel()
-                            .also { movieViewModel -> movieViewModel.isInWatchlist = true }
+                    .collectLatest { movieIdList ->
+                        val listResult = movieIdList
+                            .map { movieId -> getMovieByIdUseCase.execute(movieId) }
+                            .toList()
+                            .map { movie ->
+                                movie.asMovieViewModel()
+                                    .also { movieViewModel -> movieViewModel.isInWatchlist = true }
+                            }
+                        if (listResult.isNotEmpty()) {
+                            _status.value = Status.DONE
+                            _movies.value = listResult
+                        } else {
+                            _status.value = Status.EMPTY
+                            _movies.value = emptyList()
+                        }
                     }
-                if (listResult.isNotEmpty()) {
-                    _status.value = Status.DONE
-                    _movies.value = listResult
-                } else {
-                    _status.value = Status.EMPTY
-                    _movies.value = emptyList()
-                }
             } catch (t: Throwable) {
                 _status.value = Status.ERROR
                 _movies.value = emptyList()

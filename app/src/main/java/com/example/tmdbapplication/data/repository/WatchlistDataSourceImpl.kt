@@ -23,11 +23,11 @@ class WatchlistDataSourceImpl @Inject constructor(
             .deleteMovie(movieId)
     }
 
-    override suspend fun getWatchlist(): List<Long> {
+    override fun getWatchlist(): Flow<List<Long>> {
         return movieDatabase
             .watchlistDao()
             .getWatchlist()
-            .map { it.movieId }
+            .map { list -> list.map { watchlistEntity -> watchlistEntity.movieId } }
     }
 
     override suspend fun isInWatchlist(movieId: Long): Boolean {

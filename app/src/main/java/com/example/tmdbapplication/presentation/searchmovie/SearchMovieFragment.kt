@@ -8,7 +8,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
@@ -34,8 +33,7 @@ class SearchMovieFragment : Fragment(R.layout.fragment_search_movie) {
     private val searchResultAdapter = MoviePagingAdapter(
         onMovieClick = { movie ->
             findNavController().navigate(
-                SearchMovieFragmentDirections
-                    .actionSearchMovieFragmentToMovieDetailsFragment(movie)
+                SearchMovieFragmentDirections.actionSearchToDetails(movie)
             )
         }
     ) { movie -> searchMovieViewModel.manageSelectedInWatchlist(movie) }
@@ -51,13 +49,13 @@ class SearchMovieFragment : Fragment(R.layout.fragment_search_movie) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRecyclerView()
+        initViews()
         initListeners()
         observeLoadStateFLow()
         observeViewModel()
     }
 
-    private fun initRecyclerView() {
+    private fun initViews() {
         binding.searchResultList.apply {
             layoutManager =
                 GridLayoutManager(context, 3, RecyclerView.VERTICAL, false)
@@ -102,20 +100,19 @@ class SearchMovieFragment : Fragment(R.layout.fragment_search_movie) {
     }
 
     private fun observeViewModel() {
-        searchMovieViewModel.movies.observe(viewLifecycleOwner, Observer { pagingData ->
+        searchMovieViewModel.movies.observe(viewLifecycleOwner) { pagingData ->
             searchResultAdapter.submitData(lifecycle, pagingData)
-        })
-
-        searchMovieViewModel.showInitialMessage.observe(viewLifecycleOwner, Observer { isVisible ->
+        }
+        searchMovieViewModel.showInitialMessage.observe(viewLifecycleOwner) { isVisible ->
             binding.initialMessage.setVisibility(isVisible)
-        })
+        }
 
-        searchMovieViewModel.showEmptyQuery.observe(viewLifecycleOwner, Observer { isQueryEmpty ->
+        searchMovieViewModel.showEmptyQuery.observe(viewLifecycleOwner) { isQueryEmpty ->
             if (isQueryEmpty) {
                 showEmptyQueryToast()
                 searchMovieViewModel.showEmptyQueryComplete()
             }
-        })
+        }
     }
 
     private fun showEmptyQueryToast() {

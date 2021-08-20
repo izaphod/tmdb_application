@@ -88,8 +88,8 @@ class MovieDataSourceImpl @Inject constructor(
         ).flow
     }
 
-    override suspend fun getMovieById(movieId: Long): Flow<Movie> {
-        return flowOf(movieApiService.getMovieById(movieId).asDomainModel())
+    override suspend fun getMovieById(movieId: Long): Movie {
+        return movieApiService.getMovieById(movieId).asDomainModel()
     }
 
     companion object {

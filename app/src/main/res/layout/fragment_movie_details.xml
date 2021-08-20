@@ -10,32 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:titleTextColor="?attr/colorOnPrimary" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/backdrop_guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.45" />
-
         <ImageView
             android:id="@+id/movie_backdrop_image"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/backdrop_guideline"
+            android:layout_height="300dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
-            tools:ignore="ContentDescription" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
+            tools:scaleType="centerCrop"
+            tools:src="@drawable/backdrop_img" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/movie_poster_card"
@@ -44,9 +28,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
             app:cardCornerRadius="4dp"
-            app:layout_constraintBottom_toBottomOf="@id/backdrop_guideline"
+            app:layout_constraintBottom_toBottomOf="@id/movie_backdrop_image"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/backdrop_guideline">
+            app:layout_constraintTop_toBottomOf="@id/movie_backdrop_image">
 
             <ImageView
                 android:id="@+id/movie_poster_image"
@@ -65,13 +49,22 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
+            android:textAppearance="?attr/textAppearanceHeadline6"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/movie_poster_card"
-            app:layout_constraintTop_toBottomOf="@id/backdrop_guideline"
+            app:layout_constraintTop_toBottomOf="@id/movie_backdrop_image"
             tools:text="Spirited Away" />
+
+        <TextView
+            android:id="@+id/movie_release_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="@id/movie_title"
+            app:layout_constraintTop_toBottomOf="@id/movie_title"
+            tools:text="Jul 20, 2001" />
 
         <com.example.tmdbapplication.customview.MovieUserScoreView
             android:id="@+id/movie_rating"
@@ -80,11 +73,11 @@
             android:layout_marginTop="6dp"
             app:layout_constraintStart_toStartOf="@+id/movie_release_date"
             app:layout_constraintTop_toBottomOf="@+id/movie_release_date"
-            app:musv_backColor="@color/purple_700"
+            app:musv_backColor="@color/primaryColor"
             app:musv_highScoreColor="@color/green"
             app:musv_lowScoreColor="@color/red"
-            app:musv_normalScoreColor="@color/yellow"
-            app:musv_strokeColor="@color/purple_500"
+            app:musv_normalScoreColor="@color/secondaryLightColor"
+            app:musv_strokeColor="@color/primaryDarkColor"
             app:musv_textColor="@color/white" />
 
         <TextView
@@ -92,21 +85,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/user_score"
+            android:textAppearance="?attr/textAppearanceBody2"
             android:textColor="@color/white"
-            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/movie_rating"
             app:layout_constraintStart_toEndOf="@+id/movie_rating"
             app:layout_constraintTop_toTopOf="@+id/movie_rating" />
-
-        <TextView
-            android:id="@+id/movie_release_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="@id/movie_title"
-            app:layout_constraintTop_toBottomOf="@id/movie_title"
-            tools:text="Jul 20, 2001" />
 
         <TextView
             android:id="@+id/overview_header"
@@ -115,9 +98,8 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
             android:text="@string/overview"
+            android:textAppearance="?attr/textAppearanceHeadline6"
             android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/movie_poster_card" />
@@ -128,6 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
+            android:textAppearance="?attr/textAppearanceBody1"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
