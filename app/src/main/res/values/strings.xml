@@ -26,7 +26,7 @@
     <!--End Fragment movie details-->
 
     <!--Start Fragment search movie-->
-    <string name="edit_text_movie">Movie</string>
+    <string name="search_movie_hint">Movie</string>
     <string name="sm_text_view_initial_message">Enter the title of the movie in the search box
         and click search button on keyboard</string>
     <string name="empty_query_toast">Enter movie title first</string>

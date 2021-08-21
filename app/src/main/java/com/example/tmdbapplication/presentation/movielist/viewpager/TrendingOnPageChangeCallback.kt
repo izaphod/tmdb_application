@@ -1,4 +1,4 @@
-package com.example.tmdbapplication.presentation.movielist.pager
+package com.example.tmdbapplication.presentation.movielist.viewpager
 
 import androidx.viewpager2.widget.ViewPager2
 import com.example.tmdbapplication.presentation.model.MovieViewModel

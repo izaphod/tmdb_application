@@ -16,9 +16,9 @@ import com.example.tmdbapplication.databinding.FragmentMovieListBinding
 import com.example.tmdbapplication.presentation.model.Status
 import com.example.tmdbapplication.presentation.movielist.list.AdapterType
 import com.example.tmdbapplication.presentation.movielist.list.MovieListAdapter
-import com.example.tmdbapplication.presentation.movielist.pager.TrendingItemDecoration
-import com.example.tmdbapplication.presentation.movielist.pager.TrendingOnPageChangeCallback
-import com.example.tmdbapplication.presentation.movielist.pager.TrendingPageTransformer
+import com.example.tmdbapplication.presentation.movielist.viewpager.TrendingItemDecoration
+import com.example.tmdbapplication.presentation.movielist.viewpager.TrendingOnPageChangeCallback
+import com.example.tmdbapplication.presentation.movielist.viewpager.TrendingPageTransformer
 import com.example.tmdbapplication.util.setVisibility
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -11,13 +11,13 @@ def localProperties = new Properties()
 localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion '30.0.3'
 
     defaultConfig {
         applicationId "com.example.tmdbapplication"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
 
@@ -65,7 +65,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     // LeakCanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
     // Navigation Component
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"

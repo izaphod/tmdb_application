@@ -14,6 +14,7 @@ import com.example.tmdbapplication.presentation.model.asMovieViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import javax.inject.Inject
 
 @FlowPreview
@@ -54,6 +55,7 @@ class WatchlistViewModel @Inject constructor(
                 _status.value = Status.LOADING
                 getMoviesFromWatchlistUseCase
                     .execute()
+                    .distinctUntilChanged()
                     .collectLatest { movieIdList ->
                         val listResult = movieIdList
                             .map { movieId -> getMovieByIdUseCase.execute(movieId) }
@@ -63,7 +65,7 @@ class WatchlistViewModel @Inject constructor(
                                     .also { movieViewModel -> movieViewModel.isInWatchlist = true }
                             }
                         if (listResult.isNotEmpty()) {
-                            _status.value = Status.DONE
+                            _status.value = Status.SUCCESS
                             _movies.value = listResult
                         } else {
                             _status.value = Status.EMPTY

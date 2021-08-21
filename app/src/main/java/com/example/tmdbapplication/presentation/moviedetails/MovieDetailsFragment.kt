@@ -42,8 +42,8 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
     }
 
     private fun initToolbar() {
-        val toolbar = (activity as MainActivity).supportActionBar
-        toolbar?.title =
+        val toolbar = (activity as MainActivity).toolbar
+        toolbar.title =
             getString(R.string.fragment_movie_details_label, args.viewModel.movie.title)
     }
 

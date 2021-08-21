@@ -58,16 +58,16 @@ class PagedMovieFragment : Fragment(R.layout.fragment_paged_movie) {
     }
 
     private fun initViews(requestType: MovieRequestType) {
-        val toolbar = (activity as MainActivity).supportActionBar
+        val toolbar = (activity as MainActivity).toolbar
         when (requestType) {
             MovieRequestType.POPULAR -> {
-                toolbar?.title = getString(R.string.fragment_paged_movie_label, POPULAR)
+                toolbar.title = getString(R.string.fragment_paged_movie_label, POPULAR)
             }
             MovieRequestType.NOW_PLAYING -> {
-                toolbar?.title = getString(R.string.fragment_paged_movie_label, NOW_PLAYING)
+                toolbar.title = getString(R.string.fragment_paged_movie_label, NOW_PLAYING)
             }
             MovieRequestType.UPCOMING -> {
-                toolbar?.title = getString(R.string.fragment_paged_movie_label, UPCOMING)
+                toolbar.title = getString(R.string.fragment_paged_movie_label, UPCOMING)
             }
         }
 

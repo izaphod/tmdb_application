@@ -11,6 +11,7 @@
         style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        app:navigationIcon="@drawable/ic_arrow_back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
