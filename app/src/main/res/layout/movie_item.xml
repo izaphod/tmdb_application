@@ -5,7 +5,7 @@
     android:layout_width="116dp"
     android:layout_height="238dp"
     android:layout_margin="4dp"
-    android:background="@color/white"
+    android:backgroundTint="@color/white"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"

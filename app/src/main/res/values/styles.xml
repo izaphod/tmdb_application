@@ -10,6 +10,7 @@
         <item name="colorOnSecondary">@color/black</item>
 
         <item name="android:windowBackground">@drawable/main_background</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
     </style>
 
     <style name="CustomHeadline6" parent="TextAppearance.MaterialComponents.Headline6">
@@ -25,5 +26,14 @@
     <style name="BottomNav" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="itemBackground">@color/primaryColor</item>
         <item name="itemIconTint">@color/bottom_nav_item_tint</item>
+    </style>
+
+    <style name="Toolbar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:background">@color/primaryColor</item>
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
+
+    <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@color/primaryColor</item>
     </style>
 </resources>
