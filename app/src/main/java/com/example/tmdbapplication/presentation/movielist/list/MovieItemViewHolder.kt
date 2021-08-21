@@ -10,6 +10,7 @@ import com.example.tmdbapplication.R
 import com.example.tmdbapplication.databinding.MovieItemBinding
 import com.example.tmdbapplication.di.module.GlideApp
 import com.example.tmdbapplication.presentation.model.MovieViewModel
+import com.example.tmdbapplication.util.formatDate
 import com.example.tmdbapplication.util.formatPosterPath
 
 class MovieItemViewHolder(
@@ -41,7 +42,7 @@ class MovieItemViewHolder(
             .into(binding.moviePoster)
         binding.movieRating.userScore = movieViewModel.movie.rating
         binding.movieTitle.text = movieViewModel.movie.title
-        binding.movieReleaseDate.text = movieViewModel.movie.releaseDate
+        binding.movieReleaseDate.text = movieViewModel.movie.releaseDate?.formatDate()
         binding.imageViewMenu.setOnClickListener {
             showMenu(it, movieViewModel)
         }

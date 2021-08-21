@@ -21,4 +21,9 @@
         <item name="android:textSize">10sp</item>
         <item name="android:textColor">@color/white</item>
     </style>
+
+    <style name="BottomNav" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemBackground">@color/primaryColor</item>
+        <item name="itemIconTint">@color/bottom_nav_item_tint</item>
+    </style>
 </resources>
