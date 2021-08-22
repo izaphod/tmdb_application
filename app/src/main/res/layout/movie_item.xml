@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="116dp"
-    android:layout_height="232dp"
+    android:layout_height="238dp"
     android:layout_margin="4dp"
+    android:backgroundTint="@color/white"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
@@ -31,13 +32,13 @@
             android:layout_height="24dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="150dp"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:musv_backColor="@color/purple_700"
+            app:layout_constraintTop_toTopOf="parent"
+            app:musv_backColor="@color/primaryColor"
             app:musv_highScoreColor="@color/green"
             app:musv_lowScoreColor="@color/red"
-            app:musv_normalScoreColor="@color/yellow"
-            app:musv_strokeColor="@color/purple_500"
+            app:musv_normalScoreColor="@color/secondaryLightColor"
+            app:musv_strokeColor="@color/primaryDarkColor"
             app:musv_textColor="@color/white" />
 
         <TextView
@@ -46,13 +47,11 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="4dp"
             android:layout_marginVertical="2dp"
+            android:textAppearance="@style/CustomHeadline6"
             android:textColor="@color/black"
-            android:textSize="10sp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/movie_rating"
-            tools:ignore="SmallSp"
             tools:text="Spirited Away" />
 
         <TextView
@@ -60,11 +59,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="4dp"
-            android:textSize="10sp"
+            android:textAppearance="@style/CustomBody1"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/movie_title"
-            tools:ignore="SmallSp"
             tools:text="Jul 20, 2001" />
 
         <ImageView
@@ -73,11 +72,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="2dp"
-            android:alpha="0.7"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
+            android:elevation="8dp"
             android:focusable="true"
-            android:src="@drawable/ic_more_24"
+            android:src="@drawable/ic_more"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />

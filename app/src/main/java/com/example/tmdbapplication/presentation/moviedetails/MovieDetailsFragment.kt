@@ -4,15 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.request.RequestOptions
 import com.example.tmdbapplication.R
 import com.example.tmdbapplication.databinding.FragmentMovieDetailsBinding
 import com.example.tmdbapplication.di.module.GlideApp
+import com.example.tmdbapplication.presentation.MainActivity
 import com.example.tmdbapplication.util.formatBackdropPath
 import com.example.tmdbapplication.util.formatPosterPath
 
@@ -44,9 +42,9 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
     }
 
     private fun initToolbar() {
-        binding.toolbar.setupWithNavController(findNavController())
-        binding.toolbar.navigationIcon = ContextCompat
-            .getDrawable(requireContext(), R.drawable.ic_arrow_back)
+        val toolbar = (activity as MainActivity).toolbar
+        toolbar.title =
+            getString(R.string.fragment_movie_details_label, args.viewModel.movie.title)
     }
 
     private fun showMovieDetails() {

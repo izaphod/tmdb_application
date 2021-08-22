@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/watchlist_destination"
+    app:startDestination="@id/watchlistFragment">
+
+    <fragment
+        android:id="@+id/watchlistFragment"
+        android:name="com.example.tmdbapplication.presentation.watchlist.WatchlistFragment"
+        tools:layout="@layout/fragment_watchlist">
+        <action
+            android:id="@+id/action_watchlist_to_details"
+            app:destination="@id/movieDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/movieDetailsFragment"
+        android:name="com.example.tmdbapplication.presentation.moviedetails.MovieDetailsFragment"
+        tools:layout="@layout/fragment_movie_details">
+        <argument
+            android:name="viewModel"
+            app:argType="com.example.tmdbapplication.presentation.model.MovieViewModel" />
+    </fragment>
+</navigation>

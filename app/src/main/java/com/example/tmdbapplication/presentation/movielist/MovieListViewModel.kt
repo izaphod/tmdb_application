@@ -1,9 +1,6 @@
 package com.example.tmdbapplication.presentation.movielist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.tmdbapplication.domain.usecase.DeleteFromWatchlistUseCase
 import com.example.tmdbapplication.domain.usecase.GetMoviesUseCase
 import com.example.tmdbapplication.domain.usecase.InsertToWatchlistUseCase
@@ -68,7 +65,7 @@ class MovieListViewModel @Inject constructor(
                             resultTripleList.second.isNotEmpty() &&
                             resultTripleList.third.isNotEmpty()
                         ) {
-                            _status.value = Status.DONE
+                            _status.value = Status.SUCCESS
                             _movies.value = resultTripleList
                         } else {
                             _status.value = Status.EMPTY

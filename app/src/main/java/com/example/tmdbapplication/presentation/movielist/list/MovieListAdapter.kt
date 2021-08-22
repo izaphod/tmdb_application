@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdbapplication.R
 import com.example.tmdbapplication.presentation.model.MovieViewModel
-import com.example.tmdbapplication.presentation.movielist.pager.TrendingItemViewHolder
+import com.example.tmdbapplication.presentation.movielist.viewpager.TrendingItemViewHolder
 import com.example.tmdbapplication.presentation.pagedmovie.list.MoviePagingAdapter
 
 class MovieListAdapter(

@@ -1,6 +1,7 @@
 package com.example.tmdbapplication.util
 
 import android.text.format.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 fun Date.roll(field: Int, amount: Int): Date {
@@ -21,4 +22,10 @@ fun Date.rollUpFourWeeks(): Date {
 
 fun Date.formatted(): String {
     return DateFormat.format("yyyy-MM-dd", this).toString()
+}
+
+fun String.formatDate(): String {
+    val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        .parse(this)
+    return DateFormat.format("MMM d, yyyy", date).toString()
 }

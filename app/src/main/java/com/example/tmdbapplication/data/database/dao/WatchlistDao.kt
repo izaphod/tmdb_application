@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.tmdbapplication.data.database.entity.WatchlistEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WatchlistDao {
@@ -13,7 +14,7 @@ interface WatchlistDao {
     suspend fun insertMovie(watchlistEntity: WatchlistEntity)
 
     @Query("SELECT * FROM watchlist_database ORDER BY id ASC")
-    suspend fun getWatchlist(): List<WatchlistEntity>
+    fun getWatchlist(): Flow<List<WatchlistEntity>>
 
     @Query("DELETE FROM watchlist_database WHERE movieId = :movieId")
     suspend fun deleteMovie(movieId: Long)
