@@ -25,7 +25,11 @@ fun Date.formatted(): String {
 }
 
 fun String.formatDate(): String {
-    val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        .parse(this)
-    return DateFormat.format("MMM d, yyyy", date).toString()
+    return if (this.isBlank()) {
+        "No release date"
+    } else {
+        val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            .parse(this)
+        DateFormat.format("MMM d, yyyy", date).toString()
+    }
 }
